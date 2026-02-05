@@ -24,9 +24,10 @@ InteractAvatar is a novel dual-stream DiT framework that enables talking avatars
 * Need Ram>32G  , Vram> 8G (offload mode)
 
 # Example
+* song long
+![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example-song.png)
+* object 
 ![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example.png)
-
-
 # Citation
 ```
 @article{zhang2026making,
