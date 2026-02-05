@@ -1,1 +1,43 @@
-assets
+<svg width="600" height="100" viewBox="0 0 600 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 核心渐变：深蓝 -> 亮紫 -> 玫红 -->
+    <!-- 这种配色在学术界（如OpenAI, Meta AI）非常通用且显高级 -->
+    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />   <!-- Royal Blue -->
+      <stop offset="50%" stop-color="#7C3AED" />  <!-- Purple -->
+      <stop offset="100%" stop-color="#DB2777" /> <!-- Magenta -->
+    </linearGradient>
+  </defs>
+
+  <!-- 左侧图标：[ ● ] -->
+  <g transform="translate(40, 20)">
+    <!-- 1. 左括号 (Interaction / Grounding / Hand) -->
+    <!-- 粗壮、圆润的线条，体现稳固的交互 -->
+    <path d="M20 0 L 5 0 C 2.2 0 0 2.2 0 5 L 0 55 C 0 57.8 2.2 60 5 60 L 20 60" 
+          stroke="#1E293B" stroke-width="8" stroke-linecap="round"/>
+    
+    <!-- 2. 右括号 (Interaction / Grounding / Hand) -->
+    <path d="M50 0 L 65 0 C 67.8 0 70 2.2 70 5 L 70 55 C 70 57.8 67.8 60 65 60 L 50 60" 
+          stroke="#1E293B" stroke-width="8" stroke-linecap="round"/>
+
+    <!-- 3. 核心球体 (Avatar / Object / Talking) -->
+    <!-- 悬浮在正中央，唯一有颜色的部分，视觉焦点 -->
+    <circle cx="35" cy="30" r="14" fill="url(#coreGrad)"/>
+  </g>
+
+  <!-- 右侧文字 -->
+  <!-- 紧凑排列，字间距适中 -->
+  <g transform="translate(130, 72)">
+    <!-- Interact: 纯粹的深黑/深灰，强调力量感 -->
+    <!-- 使用系统级无衬线字体栈，确保跨平台清晰 -->
+    <text x="0" y="0" font-family="'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-weight="800" font-size="60" fill="#1E293B" letter-spacing="-1.5">
+      Interact
+    </text>
+    
+    <!-- Avatar: 渐变色，强调科技感 -->
+    <!-- x坐标根据 Interact 的大概宽度估算，紧跟其后 -->
+    <text x="225" y="0" font-family="'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif" font-weight="500" font-size="60" fill="url(#coreGrad)" letter-spacing="-0.5">
+      Avatar
+    </text>
+  </g>
+</svg>
