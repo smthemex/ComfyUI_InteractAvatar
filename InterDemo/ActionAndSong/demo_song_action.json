@@ -1,0 +1,71 @@
+[
+    {
+        "mp4_path": null,
+        "mp4_img": "./InterDemo/ActionAndSong/img/001.png",
+        "dwpose_img": "./InterDemo/ActionAndSong/dwpose/001.png",
+        "dwpose_mp4": null,
+        "prompt": [
+            "Make an OK sign with one hand",
+            "Clap hands slowly with both hands"
+        ],
+        "detailed_prompt": [
+            null,
+            null
+        ],
+        "structured_prompt": [
+            "(Raise one hand) (Form an OK sign with fingers)",
+            "(Bring hands apart) (Clap hands slowly with both hands)"
+        ],
+        "prompt_zh": "一只手比OK的手势 双手鼓掌",
+        "obj_img": null,
+        "obj_name": "None",
+        "video_id": "001_ok_clap",
+        "audio": "./InterDemo/ActionAndSong/audio/001.WAV"
+    },
+    {
+        "mp4_path": null,
+        "mp4_img": "./InterDemo/ActionAndSong/img/002.png",
+        "dwpose_img": "./InterDemo/ActionAndSong/dwpose/002.png",
+        "dwpose_mp4": null,
+        "prompt": [
+            "Wave slowly with both hands for greeting",
+            "Give a thumbs-up with one hand"
+        ],
+        "detailed_prompt": [
+            null,
+            null
+        ],
+        "structured_prompt": [
+            "(Raise both hands slowly) (Wave both hands side to side for greeting)",
+            "(Make a fist) (Extend the thumb upwards)"
+        ],
+        "prompt_zh": "两只手打招呼 伸出大拇指点赞",
+        "obj_img": null,
+        "obj_name": "None",
+        "video_id": "002_greet_thumb",
+        "audio": "./InterDemo/ActionAndSong/audio/002.WAV"
+    },
+    {
+        "mp4_path": null,
+        "mp4_img": "./InterDemo/ActionAndSong/img/003.png",
+        "dwpose_img": "./InterDemo/ActionAndSong/dwpose/003.png",
+        "dwpose_mp4": null,
+        "prompt": [
+            "Hand clenches in a fist to cheer",
+            "Rest chin on one hand in thought"
+        ],
+        "detailed_prompt": [
+            null,
+            null
+        ],
+        "structured_prompt": [
+            "(Hand clenches in a fist) (Cheer with clenched fist)",
+            "(Raise one hand slowly to the chin) (Rest chin on the hand)"
+        ],
+        "prompt_zh": "一只手握拳加油 一只手托下巴思考",
+        "obj_img": null,
+        "obj_name": "None",
+        "video_id": "003_cheer_rest",
+        "audio": "./InterDemo/ActionAndSong/audio/003.WAV"
+    }
+]

@@ -1,0 +1,8 @@
+__pyc*
+*/__pyc*
+*/*/__pyc*
+readme2*
+results
+temp
+hostfile*
+env.txt
