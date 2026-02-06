@@ -1,0 +1,44 @@
+[
+    {
+        "mp4_path": null,
+        "mp4_img": "./InterDemo/TIA2MV/img/001.jpeg",
+        "dwpose_img": "./InterDemo/TIA2MV/dwpose/001_obj_handbag.png",
+        "dwpose_mp4": null,
+        "prompt": "The man picks up his handbag.",
+        "detailed_prompt": "The man holds the handle of the handbag with his left hand while his right hand hangs naturally.",
+        "structured_prompt": "(Left hand holds the handle of the handbag)(Right hand hangs naturally)",
+        "prompt_zh": "男人提起手提包",
+        "obj_img": "./InterDemo/TIA2MV/obj_img/001/handbag_0_0.jpg",
+        "obj_name": "handbag",
+        "speech_path": "./InterDemo/TIA2MV/audio/001_0_spoken_text_en_medium/01-seedtts-01_promptvn.wav",
+        "video_id": "001_inter_handbag"
+    },
+    {
+        "mp4_path": null,
+        "mp4_img": "./InterDemo/TIA2MV/img/002.jpeg",
+        "dwpose_img": "./InterDemo/TIA2MV/dwpose/002_obj_camera.png",
+        "dwpose_mp4": null,
+        "prompt": "The man picks up the camera next to him to take a picture.",
+        "detailed_prompt": "The man first uses his right hand to pick up the camera on the table, then aims the camera at the lens, preparing to take a photo.",
+        "structured_prompt": "(Right hand picks up the camera on the table)(Aims the camera at the lens)",
+        "prompt_zh": "男人拿起手边的相机拍照",
+        "obj_img": "./InterDemo/TIA2MV/obj_img/002/camera_0_0.jpg",
+        "obj_name": "camera",
+        "speech_path": "./InterDemo/TIA2MV/audio/002_0_spoken_text_en_medium/01-seedtts-01_promptvn.wav",
+        "video_id": "002_inter_camera"
+    },
+    {
+        "mp4_path": null,
+        "mp4_img": "./InterDemo/TIA2MV/img/003.jpeg",
+        "dwpose_img": "./InterDemo/TIA2MV/dwpose/003_obj_coffee.png",
+        "dwpose_mp4": null,
+        "prompt": "The woman took the coffee from the table and drank it.",
+        "detailed_prompt": "The woman first moved her right hand away from the coffee cup, then picked up the coffee cup with her left hand, brought the cup close to her mouth, and finally took a sip.",
+        "structured_prompt": "(Moved her right hand away from the coffee cup)(Picked up the coffee cup with her left hand)(Brought the cup close to her mouth)(Took a sip)",
+        "prompt_zh": "女人拿起桌上的咖啡喝",
+        "obj_img": "./InterDemo/TIA2MV/obj_img/003/coffee_0_0.jpg",
+        "obj_name": "coffee",
+        "speech_path": "./InterDemo/TIA2MV/audio/003_1_spoken_text_en_medium/02-seedtts-02_promptvn.wav",
+        "video_id": "003_inter_coffee"
+    }
+]

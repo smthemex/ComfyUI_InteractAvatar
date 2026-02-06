@@ -1,0 +1,16 @@
+[project]
+name = "interactavatar"
+description = "Making Avatars InteractTowards Text-Driven Human-Object Interaction for Controllable Talking Avatars"
+version = "1.0.0"
+license = {file = "LICENSE"}
+dependencies = ["toml", "transformers", "diffusers", "datasets", "pillow", "sentencepiece", "protobuf", "peft", "torch-optimi", "tensorboard", "tqdm", "safetensors", "bitsandbytes", "imageio[ffmpeg]", "av", "einops", "accelerate", "loguru", "easydict", "ftfy", "decord", "pyloudnorm", "#deepspeed"]
+
+[project.urls]
+Repository = "https://github.com/smthemex/ComfyUI_InteractAvatar"
+#  Used by Comfy Registry https://registry.comfy.org
+
+[tool.comfy]
+PublisherId = "smthemex"
+DisplayName = "ComfyUI_InteractAvatar"
+Icon = ""
+includes = []

@@ -1,0 +1,47 @@
+[
+    {
+        "mp4_path": "./InterDemo/TIAP2V/mp4/self_collect_20250508_trans_slpit_self_collect_20250508_24_000_crop_0125.mp4",
+        "mp4_img": null,
+        "dwpose_img": null,
+        "dwpose_mp4": "./InterDemo/TIAP2V/dwpose/self_collect_20250508_trans_slpit_self_collect_20250508_24_000_crop_0125.mp4",
+        "prompt": "A woman with long dark hair, wearing large gold hoop earrings and a navy blue hoodie, sits holding a thin, flat, black rectangular object with vertical ridges. She is indoors in a room with white walls, a wooden cabinet visible behind her, and several cardboard boxes on the floor around her.",
+        "detailed_prompt": null,
+        "structured_prompt": null,
+        "prompt_zh": "A woman with long dark hair, wearing large gold hoop earrings and a navy blue hoodie, sits holding a thin, flat, black rectangular object with vertical ridges. She is indoors in a room with white walls, a wooden cabinet visible behind her, and several cardboard boxes on the floor around her.",
+        "obj_img": "./InterDemo/TIAP2V/obj_img/self_collect_20250508_trans_slpit_self_collect_20250508_24_000_crop_0125_##frame##_28_##object##_laptop.png",
+        "obj_name": "laptop",
+        "speech_path": "./InterDemo/TIAP2V/speech/bzya5p228n0xlz96_clip_0000_118.wav",
+        "video_id": "self_collect_20250508_trans_slpit_self_collect_20250508_24_000_crop_0125",
+        "homa_img": "/apdcephfs_cq8/share_1367250/ziyaohuang/projects/data_pipeline/testdata_processor/testdata-selfcollect_20250508/pasted_human_images_whiteback/self_collect_20250508_trans_slpit_self_collect_20250508_24_000_crop_0125_##frame##_28_##human##_laptop.png"
+    },
+    {
+        "mp4_path": "./InterDemo/TIAP2V/mp4/self_collect_20250508_trans_slpit_self_collect_20250508_25_000_crop_0050.mp4",
+        "mp4_img": null,
+        "dwpose_img": null,
+        "dwpose_mp4": "./InterDemo/TIAP2V/dwpose/self_collect_20250508_trans_slpit_self_collect_20250508_25_000_crop_0050.mp4",
+        "prompt": "An Asian male wearing a blue sweater, purple shirt, and black baseball cap holds up a black Nike Dunk High sneaker. He is wearing glasses and has short black hair. Behind him are several stuffed animals, including Mickey Mouse, and framed pictures on a light blue wall.",
+        "detailed_prompt": null,
+        "structured_prompt": null,
+        "prompt_zh": "An Asian male wearing a blue sweater, purple shirt, and black baseball cap holds up a black Nike Dunk High sneaker. He is wearing glasses and has short black hair. Behind him are several stuffed animals, including Mickey Mouse, and framed pictures on a light blue wall.",
+        "obj_img": "./InterDemo/TIAP2V/obj_img/self_collect_20250508_trans_slpit_self_collect_20250508_25_000_crop_0050_##frame##_44_##object##_shoe.png",
+        "obj_name": "shoe",
+        "speech_path": "./InterDemo/TIAP2V/speech/zlhjs3erm2y06y5v_clip_0000_20.wav",
+        "video_id": "self_collect_20250508_trans_slpit_self_collect_20250508_25_000_crop_0050",
+        "homa_img": "/apdcephfs_cq8/share_1367250/ziyaohuang/projects/data_pipeline/testdata_processor/testdata-selfcollect_20250508/pasted_human_images_whiteback/self_collect_20250508_trans_slpit_self_collect_20250508_25_000_crop_0050_##frame##_44_##human##_shoe.png"
+    },
+    {
+        "mp4_path": "./InterDemo/TIAP2V/mp4/self_collect_20250508_trans_slpit_self_collect_20250508_29_000_crop_0025.mp4",
+        "mp4_img": null,
+        "dwpose_img": null,
+        "dwpose_mp4": "./InterDemo/TIAP2V/dwpose/self_collect_20250508_trans_slpit_self_collect_20250508_29_000_crop_0025.mp4",
+        "prompt": "An Asian woman with fair skin, short black hair, and wearing a beige sweater sits indoors. She is holding a white Nintendo Switch Lite console in her hands. She has a silver necklace with a round pendant and bracelets on both wrists. Behind her are two windows, a white dresser, and a white shelf unit.",
+        "detailed_prompt": null,
+        "structured_prompt": null,
+        "prompt_zh": "An Asian woman with fair skin, short black hair, and wearing a beige sweater sits indoors. She is holding a white Nintendo Switch Lite console in her hands. She has a silver necklace with a round pendant and bracelets on both wrists. Behind her are two windows, a white dresser, and a white shelf unit.",
+        "obj_img": "./InterDemo/TIAP2V/obj_img/self_collect_20250508_trans_slpit_self_collect_20250508_29_000_crop_0025_##frame##_108_##object##_unknown_3.png",
+        "obj_name": "3",
+        "speech_path": "./InterDemo/TIAP2V/speech/fexqre0ojfx8x7s5_clip_0000_19.wav",
+        "video_id": "self_collect_20250508_trans_slpit_self_collect_20250508_29_000_crop_0025",
+        "homa_img": "/apdcephfs_cq8/share_1367250/ziyaohuang/projects/data_pipeline/testdata_processor/testdata-selfcollect_20250508/pasted_human_images_whiteback/self_collect_20250508_trans_slpit_self_collect_20250508_29_000_crop_0025_##frame##_108_##human##_unknown_3.png"
+    }
+]
