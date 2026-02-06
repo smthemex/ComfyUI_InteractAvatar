@@ -20,15 +20,44 @@
 # ComfyUI_InteractAvatar
 InteractAvatar is a novel dual-stream DiT framework that enables talking avatars to perform Grounded Human-Object Interaction (GHOI)
 
-# Coming soon
-* Need Ram>32G  , Vram> 8G (offload mode)
+# Tips
+* If your Vram <24G,turn on 'offload', ActionAndSong mode use 'long model' and need chocie '2' mode;example img\video\ audio in "InterDemo" dir
+* test env 64G RAM, 12G VRAM,win11
+* The prompt words for the singing mode and the action prompt words must have the same number of lines；
+* 小显存开启offload，唱歌用带long的dit，模式选'2'，否则用常规的,示例图片音频等在InterDemo文件内; 基本上40G加8G能跑普通模式，长时长唱歌可能有难度，唱歌模式的提示词和动作提示词必须要有相同的行数
 
-# Example
+
+# 1. Installation
+
+In the ./ComfyUI /custom_nodes directory, run the following:   
+```
+git clone https://github.com/smthemex/ComfyUI_InteractAvatar.git
+```
+---
+# 2. Requirements  
+```
+pip install -r requirements.txt
+```
+# 3. Models
+* wan 2.2 vae/clip [Comfy-Org/Wan_2.2_ComfyUI_Repackaged](https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/tree/main/split_files)
+* InteractAvatar dit  [youliang1233214/InteractAvatar](https://huggingface.co/youliang1233214/InteractAvatar/tree/main)  
+
+```
+--  ComfyUI/models/vae
+    |-- wan2.2_vae.safetensors # or Wan2.2_VAE.pth origin
+--  ComfyUI/models/clip
+    |-- umt5_xxl_fp8_e4m3fn_scaled.safetensors  # or fp16
+--  ComfyUI/models/diffusion_models
+     |--interact-avatar-long.safetensors  #  rename from diffusion_pytorch_model.safetensors  long or normal
+```
+
+# 4 Example
 * song long
 ![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example-song.png)
 * object 
 ![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example.png)
-# Citation
+
+# 5 Citation
 ```
 @article{zhang2026making,
   title={Making Avatars Interact: Towards Text-Driven Human-Object Interaction for Controllable Talking Avatars},
