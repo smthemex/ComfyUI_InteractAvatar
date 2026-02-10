@@ -71,7 +71,7 @@ class InteractAvatar_SM_Predata(io.ComfyNode):
                 io.Vae.Input("vae"),
                 io.Image.Input("images"), # image or video
                 io.Image.Input("pose_images"), # image or video
-                io.Int.Input("short_side", default=512, min=256, max=nodes.MAX_RESOLUTION,step=32,display_mode=io.NumberDisplay.number),
+                io.Combo.Input("short_side",options= [704,512]),
                 io.String.Input("prompt",multiline=True, default="两只手打招呼 伸出大拇指点赞"),
                 io.String.Input("negative_prompt",multiline=True, default="bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards"),
                 io.String.Input("structured_prompt",multiline=True, default=" (Raise both hands slowly) (Wave both hands side to side for greeting),\n (Make a fist) (Extend the thumb upwards)"),

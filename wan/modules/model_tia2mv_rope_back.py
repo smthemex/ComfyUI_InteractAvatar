@@ -1479,6 +1479,7 @@ class WanModel(ModelMixin, ConfigMixin):
         use_gradient_checkpointing_offload=False,
         cond_flag=False,
         gpu_manager=None,
+        up_scale=2.75,
         **kwargs
     ):
         r"""
@@ -1512,16 +1513,14 @@ class WanModel(ModelMixin, ConfigMixin):
         device = self.patch_embedding.weight.device
         if self.freqs.device != device:
             self.freqs = self.freqs.to(device)
-        # print(x.shape)
-        # embeddings
         if x is not None:
             x = [self.patch_embedding(u.unsqueeze(0)) for u in x]  # [b, 1, dim, t, h/2, w/2] -> [b,seq_len,dim 1536]
             grid_sizes = torch.stack(
                 [torch.tensor(u.shape[2:], dtype=torch.long) for u in x])  # [1, 3], thw
             frame_l = x[0].shape[-1] * x[0].shape[-2]
             x = [u.flatten(2).transpose(1, 2) for u in x]  # [b,  dim, thw/4] => [b, thw/4, dim]
-            seq_lens = torch.tensor([u.size(1) for u in x], dtype=torch.long)
-
+            seq_lens = torch.tensor([u.size(1) for u in x], dtype=torch.long) 
+            #print(seq_lens,"seq lens")  #tensor([10368]) seq lens
             if seq_len!=0:
                 assert seq_lens.max() <= seq_len
                 x = torch.cat([
@@ -1672,7 +1671,6 @@ class WanModel(ModelMixin, ConfigMixin):
             )
         iii = 0
         pre_motion = torch.zeros_like(motion, requires_grad=True)
-        #print(f"len(self.blocks): {len(self.blocks)}",len(self.zero_motion_proj_blocks),len(self.motion_blocks)) #30,30,30
         for idx,block in enumerate(self.blocks):
             if gpu_manager is not None:
                 if idx < len(self.blocks):
@@ -1690,11 +1688,12 @@ class WanModel(ModelMixin, ConfigMixin):
             residual_motion = residual_motion.transpose(1, 2).reshape(bb, -1, ff, hh, ww)
             residual_motion = residual_motion.permute(0,2,1,3,4).reshape(bb*ff, -1, hh, ww)
             residual_motion_up = F.interpolate(
-                residual_motion, scale_factor=(2.75, 2.75), 
+                residual_motion, scale_factor=(up_scale, up_scale),  #2.75 = 704/256,2.0=512/256
                 mode='bilinear', align_corners=False
                 ).to(motion.dtype)
             H_out, W_out = residual_motion_up.shape[-2], residual_motion_up.shape[-1]
             last_part_len = H_out * W_out
+   
             residual_motion_up = residual_motion_up.reshape(bb, ff, -1, H_out, W_out).permute(0,2,1,3,4)
 
             if gpu_manager is not None:
@@ -1706,29 +1705,14 @@ class WanModel(ModelMixin, ConfigMixin):
                     prev_module_ = gpu_manager.managed_motion_proj_modules[idx - 1]
                     if hasattr(prev_module_, 'to'):
                         prev_module_.to('cpu')
-                
+   
             value_to_add = self.zero_motion_proj_blocks[idx](residual_motion_up.flatten(2).transpose(1, 2))
-            #print(f"value_to_add shape: {value_to_add.shape}",f"x shape: {x.shape}",f"last_part_len: {last_part_len}") #value_to_add shape: torch.Size([1, 15972, 3072])
+            #print(f"value_to_add shape: {value_to_add.shape}",f"x shape: {x.shape}",f"last_part_len: {last_part_len}") 
+            #value_to_add shape: torch.Size([1, 19602, 3072]) x shape: torch.Size([1, 10368, 3072]) last_part_len: 726 # if use short_side=512 got error when upscale=2.75
+
+            x[:, :-last_part_len, :] = x[:, :-last_part_len, :] + value_to_add[:, :-last_part_len, :]
 
 
-            #x[:, :-last_part_len, :] = x[:, :-last_part_len, :] + value_to_add[:, :-last_part_len, :]
-
-            # 确保 last_part_len 不超过 x 的序列长度
-            last_part_len = min(last_part_len, x.size(1))
-
-            # 计算 x 中需要更新的长度
-            x_update_len = x.size(1) - last_part_len
-
-            # 确保 value_to_add 的长度与 x_update_len 匹配
-            if value_to_add.size(1) >= x_update_len:
-                # 如果 value_to_add 足够长，只使用前 x_update_len 个位置
-                x[:, :x_update_len, :] = x[:, :x_update_len, :] + value_to_add[:, :x_update_len, :]
-            else:
-                # 如果 value_to_add 比 x_update_len 短，使用全部 value_to_add
-                x[:, :value_to_add.size(1), :] = x[:, :value_to_add.size(1), :] + value_to_add
-
-            ## apply motion block
-            
             if gpu_manager is not None:
                 if idx < len(self.motion_blocks):
                     module_1 = gpu_manager.managed_motion_modules[idx]

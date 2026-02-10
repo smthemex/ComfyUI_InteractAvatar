@@ -161,7 +161,8 @@ class WanTIA2MVRefBackIDPrefix:
             )
         logging.info(f"Creating WanModel from {checkpoint_dir}")
         model_cfg = config
-        model_type = 'ti2v' if model_cfg.__name__ == 'Config: Wan TI2V 5B' else 'i2v'
+        #print(model_cfg.__name__)
+        model_type = 'ti2v' if model_cfg.__name__ == 'Config: Wan TI2V 5B' else 'i2v' #Config: Wan TI2V 5B
         ctx = init_empty_weights if is_accelerate_available() else nullcontext
         with ctx(): 
             unet = WanModel(
@@ -298,7 +299,8 @@ class WanTIA2MVRefBackIDPrefix:
                 - H: Frame height (from max_area)
                 - W: Frame width from max_area)
         """
-
+        up_scale = 2.75 if kwargs.get('short_side', 704)==704 else 2.0
+        #print(f'frame_num: {frame_num}')    
         if self.origin_mode:
             cond_image = TF.to_tensor(img).sub_(0.5).div_(0.5).to(self.device)
             cond_image = cond_image[None, :, None, :, :]
@@ -398,9 +400,10 @@ class WanTIA2MVRefBackIDPrefix:
         if self.origin_mode:
             if mode in ['a2v','a2mv','mv','i2v']:
                 cond_pose_sequence = torch.zeros_like(cond_pose_sequence)
-
+        #print(f'mode: {mode}')
         if mode in ['p2v','mv','i2v']:
             audio_embs = zero_audio_embs
+
         if self.origin_mode:
             h, w = cond_image.shape[-2], cond_image.shape[-1]
             lat_h, lat_w = h // self.vae_stride[1], w // self.vae_stride[2]
@@ -411,12 +414,13 @@ class WanTIA2MVRefBackIDPrefix:
             lat_h=kwargs.get('lat_h', None)
             lat_w=kwargs.get('lat_w', None)
             max_seq_len=kwargs.get('max_seq_len', None)
+        #print(f'max_seq_len: {max_seq_len}',lat_h,lat_w) # 15232 32 56  34*32/2*56/2= 15232
         noise = torch.randn(
             1, 48, (frame_num - 1) // 4 + 1 + 1,
             lat_h,
             lat_w,
             dtype=torch.float32,
-            device=self.device) 
+            device=self.device)  # 初始噪声加多4帧
         if self.origin_mode:
             cond_image = self.vae.encode([cond_image.squeeze(0).to(torch.float32)])[0].unsqueeze(0)
             obj_image = self.vae.encode([obj_image.repeat(1, 1, 4, 1, 1).squeeze(0).to(torch.float32)])[0].unsqueeze(0)
@@ -437,7 +441,7 @@ class WanTIA2MVRefBackIDPrefix:
             motion_lat_h=kwargs.get('motion_lat_h', None)
             motion_lat_w=kwargs.get('motion_lat_w', None)
             motion_max_seq_len=kwargs.get('motion_max_seq_len', None)
-            
+        #print(f'motion_max_seq_len: {motion_max_seq_len}',motion_lat_h,motion_lat_w)     #motion_max_seq_len: 2496 24 16
         motion_noise = torch.randn(
             1, 48, (frame_num - 1) // 4 + 1 + 1,
             motion_lat_h,
@@ -479,14 +483,15 @@ class WanTIA2MVRefBackIDPrefix:
             else:
                 gpu_manager = BlockGPUManager(device="cuda")
                 gpu_manager.setup_for_inference(self.model)
-            #print(latent.shape,cond_image.shape,obj_image.shape) #torch.Size([1, 48, 22, 48, 32]) torch.Size([1, 48, 1, 48, 32]) torch.Size([1, 48, 1, 48, 32])
+            #print(latent.shape,cond_image.shape,obj_image.shape) #torch.Size([1, 48, 35, 32, 56]) torch.Size([1, 48, 1, 32, 56]) torch.Size([1, 48, 1, 32, 56])
             latent[:, :, 0:1] = cond_image 
             latent[:, :, -1:] = obj_image
-            #print(latent_motion.shape,cond_dw_img.shape,small_img.shape) #torch.Size([1, 48, 22, 24, 16]) torch.Size([1, 48, 1, 24, 16]) torch.Size([1, 48, 1, 24, 16])
+            #print(latent_motion.shape,cond_dw_img.shape,small_img.shape) #torch.Size([1, 48, 35, 16, 28]) torch.Size([1, 48, 1, 16, 28]) torch.Size([1, 48, 1, 16, 28])
             latent_motion[:, :, 0:1] = cond_dw_img
             latent_motion[:, :, -1:] = small_img 
             #print(cond_pose_sequence.shape) #torch.Size([1, 48, 21, 24, 16])
             cond_pose_sequence = torch.concat([cond_pose_sequence, small_img], dim=2)
+            #print(f'cond_pose_sequence.shape: {cond_pose_sequence.shape}') #torch.Size([1, 48, 35, 16, 28])
             cond_pose_sequence = cond_pose_sequence.to(latent_motion.dtype).to(self.device,cur_dtype)
             audio_embs = audio_embs.to(latent_motion.dtype).to(self.device,cur_dtype)
             # zero_audio_embs = zero_audio_embs.to(latent_motion.dtype).to(self.device)
@@ -494,8 +499,8 @@ class WanTIA2MVRefBackIDPrefix:
             # prepare condition and uncondition configs
             arg_c = {
                 'context_list': [context[0].to(cur_dtype)],
-                'seq_len': max_seq_len + lat_h * lat_w //4,
-                'seq_len_motion': motion_max_seq_len + motion_lat_h * motion_lat_w //4,
+                'seq_len': max_seq_len + lat_h * lat_w //4, # 补齐4帧长度
+                'seq_len_motion': motion_max_seq_len + motion_lat_h * motion_lat_w //4, # 15232+
                 'mode': mode,
                 'skip_block': False,
                 'audio_embedding': audio_embs,
@@ -531,11 +536,11 @@ class WanTIA2MVRefBackIDPrefix:
                     arg_null_text['skip_block'] = False
                     #print('no bad_cfg', timestep, bad_cfg)
 
-
+    
                 if mode not in ['mv','a2mv']:
                     noise_pred_cond,  noise_pred_cond_motion = self.model(
                         x=latent_model_input,motion=cond_pose_sequence,
-                        t=timestep,motion_t=zero_timestep, **arg_c,gpu_manager=gpu_manager,
+                        t=timestep,motion_t=zero_timestep, **arg_c,gpu_manager=gpu_manager,up_scale=up_scale,
                         )
                     torch_gc()
                     noise_pred_drop_text, noise_pred_drop_text_motion = self.model(
@@ -543,14 +548,14 @@ class WanTIA2MVRefBackIDPrefix:
                         motion=cond_pose_sequence, 
                         t=timestep,motion_t=zero_timestep, 
                         **arg_null_text,
-                        gpu_manager=gpu_manager,
+                        gpu_manager=gpu_manager,up_scale=up_scale,
                     )
                     torch_gc()
                 else:
                     # inference with CFG strategy
                     noise_pred_cond,  noise_pred_cond_motion = self.model(
                         x=latent_model_input,motion=latent_model_input_motion,
-                          t=timestep,motion_t=timestep, **arg_c,gpu_manager=gpu_manager,
+                          t=timestep,motion_t=timestep, **arg_c,gpu_manager=gpu_manager,up_scale=up_scale,
                           )
                     torch_gc()
                     noise_pred_drop_text, noise_pred_drop_text_motion = self.model(
@@ -559,7 +564,7 @@ class WanTIA2MVRefBackIDPrefix:
                         t=timestep,
                         motion_t=timestep, 
                         **arg_null_text,
-                        gpu_manager=gpu_manager,
+                        gpu_manager=gpu_manager,up_scale=up_scale,
 
                     )
                     torch_gc()
@@ -649,6 +654,7 @@ class WanTIA2MVRefBackIDPrefix:
         Generates video frames autoregressively with Latent Prefix Loop.
         Segment Length: 101 frames (26 temporal latents + 2 condition latents).
         """
+        up_scale = 2.75 if kwargs.get('short_side', 704)==704 else 2.0
         if self.origin_mode:
             # --- 1. 输入预处理 (Input Preprocessing) ---
             # 初始首帧 (Start Frame) - 仅用于第一段
@@ -996,14 +1002,14 @@ class WanTIA2MVRefBackIDPrefix:
                     # Model Forward
                     if three_cfg:
                         noise_pred_cond, noise_pred_cond_motion = self.model(
-                            x=latent_model_input, motion=motion_input, t=timestep, motion_t=motion_time, **arg_c,gpu_manager=gpu_manager)
+                            x=latent_model_input, motion=motion_input, t=timestep, motion_t=motion_time, **arg_c,gpu_manager=gpu_manager,up_scale=up_scale,)
                         torch_gc()
                         noise_pred_drop_text, noise_pred_drop_text_motion = self.model(
                             x=latent_model_input, 
                             motion=motion_input, 
                             t=timestep, 
                             motion_t=motion_time, 
-                            **arg_null_text,gpu_manager=gpu_manager
+                            **arg_null_text,gpu_manager=gpu_manager,up_scale=up_scale
                         )
                         torch_gc()
                         noise_pred_pure_audio, noise_pred_pure_audio_motion = self.model(
@@ -1011,7 +1017,7 @@ class WanTIA2MVRefBackIDPrefix:
                             motion=motion_input, 
                             t=timestep, 
                             motion_t=motion_time, 
-                            **arg_pure_audio,gpu_manager=gpu_manager
+                            **arg_pure_audio,gpu_manager=gpu_manager,up_scale=up_scale,
                         )
                         torch_gc()
                         
@@ -1023,11 +1029,11 @@ class WanTIA2MVRefBackIDPrefix:
                         )
                     else:
                         noise_pred_cond, noise_pred_cond_motion = self.model(
-                            x=latent_model_input, motion=motion_input, t=timestep, motion_t=motion_time, **arg_c,gpu_manager=gpu_manager)
+                            x=latent_model_input, motion=motion_input, t=timestep, motion_t=motion_time, **arg_c,gpu_manager=gpu_manager,up_scale=up_scale,)
                         torch_gc()
                         noise_pred_drop_text, noise_pred_drop_text_motion = self.model(
                             x=latent_model_input, motion=motion_input, t=timestep, 
-                            motion_t=motion_time, **arg_null_text,gpu_manager=gpu_manager)
+                            motion_t=motion_time, **arg_null_text,gpu_manager=gpu_manager,up_scale=up_scale,)
                         torch_gc()
                         
                         noise_pred = noise_pred_drop_text + text_guide_scale * (noise_pred_cond - noise_pred_drop_text)
