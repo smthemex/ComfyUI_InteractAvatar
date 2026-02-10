@@ -13,7 +13,7 @@ import torchaudio
 import folder_paths
 from comfy.utils import common_upscale,ProgressBar
 from safetensors.torch import load_file
-
+import soundfile as sf 
 import comfy.model_management as mm
 from pathlib import PureWindowsPath
 cur_path = os.path.dirname(os.path.abspath(__file__))
@@ -136,7 +136,22 @@ def clear_comfyui_cache():
     max_gpu_memory = torch.cuda.max_memory_allocated()
     print(f"After Max GPU memory allocated: {max_gpu_memory / 1000 ** 3:.2f} GB")
 
+# def trans2path(audio):
+#     if audio is None:
+#         return None
+#     import io as io_base
+#     audio_file_prefix = ''.join(random.choice("0123456789") for _ in range(6))
+#     audio_file = os.path.join(folder_paths.get_input_directory(), f"audio_{audio_file_prefix}_temp.wav")
+#     buff = io_base.BytesIO()
+
+#     torchaudio.save(buff, audio["waveform"].squeeze(0), audio["sample_rate"], format="FLAC")
+#     with open(audio_file, 'wb') as f:
+#         f.write(buff.getbuffer())
+#     return audio_file
 def trans2path(audio):
+    """
+    修正版：使用 soundfile 代替 torchaudio.save 以避开 torchcodec 的环境报错。
+    """
     if audio is None:
         return None
     import io as io_base
@@ -144,10 +159,25 @@ def trans2path(audio):
     audio_file = os.path.join(folder_paths.get_input_directory(), f"audio_{audio_file_prefix}_temp.wav")
     buff = io_base.BytesIO()
 
-    torchaudio.save(buff, audio["waveform"].squeeze(0), audio["sample_rate"], format="FLAC")
+    # --- 修正逻辑开始 ---
+    # ComfyUI 音频格式通常为 [Batch, Channels, Samples] -> [1, C, S]
+    # 我们需要将其转换为 NumPy，并调整维度为 soundfile 要求的 [Samples, Channels]
+    waveform = audio["waveform"].squeeze(0).cpu().numpy()  # 结果为 [C, S]
+    sample_rate = audio["sample_rate"]
+
+    if waveform.ndim == 2:
+        waveform = waveform.T  # 转置为 [S, C]
+    
+    # 使用 soundfile 直接写入内存流，不触发 torchaudio 的后端检测
+    sf.write(buff, waveform, sample_rate, format="FLAC")
+    # --- 修正逻辑结束 ---
+
     with open(audio_file, 'wb') as f:
         f.write(buff.getbuffer())
     return audio_file
+
+
+
 
 
 def encode_image( image, vae):

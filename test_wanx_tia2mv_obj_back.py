@@ -269,7 +269,6 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
         dw_seqs = [dw.resize(dw_img.size, Image.LANCZOS) for dw in dw_seqs]
         dwpose_len = len(dw_seqs)
         dwpose_frame_num = (dwpose_len - 1) // 4 * 4 + 1
-
     # pre audio
     if audio_path is not None:
         audio_input, sampling_rate = librosa.load(audio_path, sr=16000)
@@ -281,7 +280,7 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
         audio_frame_num = dwpose_frame_num
         sampling_rate = 16000
 
-    if dw_seqs is not None:
+    if dw_seqs is not None: # 对齐pose和音频帧数
         dw_seqs = dw_seqs[:frame_num]
         if audio_frame_num > dwpose_frame_num:
             padding_dwpose = dw_seqs[-1]
@@ -292,9 +291,10 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
             audio_frames_clip = np.concatenate([audio_frames_clip, padding_audio], axis=0)
             audio_frame_num = dwpose_frame_num
     if dw_seqs is None and mode == 'ap2v':
-        dw_seqs = [dw_img] * audio_frame_num
+        dw_seqs = [dw_img] * audio_frame_num #对齐帧数
 
-    frame_num = min(frame_num,min(audio_frame_num,dwpose_frame_num))
+    frame_num = min(frame_num,min(audio_frame_num,dwpose_frame_num)) #对齐推理帧和音频帧数
+
     audio_frames_clip = audio_frames_clip[:int(frame_num * sampling_rate / 25)]
 
     wav2vec_feature_extractor, audio_encoder= custom_init(device, wav2vec_dir)
@@ -330,8 +330,8 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
     if mode in ['a2v','a2mv','mv','i2v']:
         dw_seqs = None
 
-    vae_stride=WAN_CONFIGS['ti2v-5B'].vae_stride 
-    patch_size=WAN_CONFIGS['ti2v-5B'].patch_size 
+    vae_stride=WAN_CONFIGS['ti2v-5B'].vae_stride  #(4, 16, 16)
+    patch_size=WAN_CONFIGS['ti2v-5B'].patch_size  #(1, 2, 2)
     sp_size=1
 
     if  back_append_frame==1:
@@ -345,15 +345,16 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
         
         if dw_seqs is not None:
             if isinstance(dw_seqs, list): # If input is a list of PIL Images
-                processed_poses = [phi2narry(p) for p in dw_seqs]
-                cond_pose_sequence = torch.stack(processed_poses).to(device)
+                processed_poses = [phi2narry(p.convert('RGB')) for p in dw_seqs]
+                cond_pose_sequence=torch.cat(processed_poses).to(device)
+                #cond_pose_sequence = torch.stack(processed_poses).to(device)
             else: # If input is already a tensor
                 cond_pose_sequence = dw_seqs.to(device)
             dwpose_len = cond_pose_sequence.shape[0]
             dwpose_len = (dwpose_len - 1) // vae_stride[0] * vae_stride[0] + 1
             frame_num = min(frame_num, dwpose_len)
             cond_pose_sequence = cond_pose_sequence[:frame_num]
-
+            #print(cond_pose_sequence.shape) #torch.Size([133, 256, 448, 3])
         else:
             cond_pose_sequence = torch.ones((frame_num, pose_ref_img.shape[1], pose_ref_img.shape[2], pose_ref_img.shape[3]), device=pose_ref_img.device, dtype=pose_ref_img.dtype) * 0.5
 
@@ -419,6 +420,7 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
             mode=mode,
             frame_num=frame_num,
             max_frames_num=frame_num,
+            short_side=short_side,
             )   
     else:
         curr_cond_image=phi2narry(img) #BHWC
@@ -434,8 +436,8 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
         # Pose Sequence 处理
         if dw_seqs is not None:
             if isinstance(dw_seqs, list): 
-                processed_poses = [phi2narry(p) for p in dw_seqs]
-                cond_pose_sequence_full = torch.stack(processed_poses).to(device)
+                processed_poses = [phi2narry(p.convert('RGB')) for p in dw_seqs]
+                cond_pose_sequence=torch.cat(processed_poses).to(device)
             else: 
                 cond_pose_sequence_full = dw_seqs.to(device)
         else:
@@ -535,5 +537,6 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
             frame_num=frame_num,
             vae=vae,
             max_frames_num=frame_num,
+            short_side=short_side,
             )   
     return data_dict

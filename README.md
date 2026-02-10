@@ -20,7 +20,10 @@
 # ComfyUI_InteractAvatar
 InteractAvatar is a novel dual-stream DiT framework that enables talking avatars to perform Grounded Human-Object Interaction (GHOI)
 
-# Tips
+# Update
+* fix bug ,now  output video short side muse be 512 or 704
+
+
 * If your Vram <24G,turn on 'offload', ActionAndSong mode use 'long model' and need chocie '2' mode;example img\video\ audio in "InterDemo" dir
 * test env 64G RAM, 12G VRAM,win11
 * The prompt words for the singing mode and the action prompt words must have the same number of lines；
@@ -56,6 +59,8 @@ pip install -r requirements.txt
 ![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example-song.png)
 * object 
 ![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example.png)
+* ap2v audio and pose driver
+![](https://github.com/smthemex/ComfyUI_InteractAvatar/blob/main/example_workflows/example_ap2v.png)
 
 # 5 Citation
 ```
