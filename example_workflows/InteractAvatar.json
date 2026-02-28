@@ -1,8 +1,8 @@
 {
   "id": "70258d66-2650-4bb1-b607-75e03c1f7f28",
   "revision": 0,
-  "last_node_id": 70,
-  "last_link_id": 93,
+  "last_node_id": 105,
+  "last_link_id": 145,
   "nodes": [
     {
       "id": 4,
@@ -16,8 +16,8 @@
         46
       ],
       "flags": {},
-      "order": 33,
-      "mode": 0,
+      "order": 45,
+      "mode": 2,
       "inputs": [
         {
           "name": "samples",
@@ -56,8 +56,8 @@
         46
       ],
       "flags": {},
-      "order": 37,
-      "mode": 2,
+      "order": 44,
+      "mode": 0,
       "inputs": [
         {
           "name": "samples",
@@ -85,143 +85,6 @@
       "widgets_values": []
     },
     {
-      "id": 23,
-      "type": "CLIPLoader",
-      "pos": [
-        22571.92322214492,
-        -801.1227967958882
-      ],
-      "size": [
-        270,
-        106
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            43
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
-        "wan",
-        "default"
-      ]
-    },
-    {
-      "id": 24,
-      "type": "VAELoader",
-      "pos": [
-        22582.16201926142,
-        -633.2498629090453
-      ],
-      "size": [
-        270,
-        58
-      ],
-      "flags": {},
-      "order": 1,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            26,
-            44
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "Wan2.2_VAE.pth"
-      ]
-    },
-    {
-      "id": 32,
-      "type": "InvertMask",
-      "pos": [
-        22906.801289048886,
-        69.22168329705264
-      ],
-      "size": [
-        140,
-        26
-      ],
-      "flags": {},
-      "order": 26,
-      "mode": 2,
-      "inputs": [
-        {
-          "name": "mask",
-          "type": "MASK",
-          "link": 41
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [
-            50
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "InvertMask"
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 25,
-      "type": "LoadImage",
-      "pos": [
-        22240.782104397193,
-        -694.856000903146
-      ],
-      "size": [
-        270,
-        314.00000000000006
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            45
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "003.jpeg",
-        "image"
-      ]
-    },
-    {
       "id": 21,
       "type": "InteractAvatar_SM_Sampler",
       "pos": [
@@ -233,8 +96,8 @@
         318
       ],
       "flags": {},
-      "order": 34,
-      "mode": 2,
+      "order": 41,
+      "mode": 0,
       "inputs": [
         {
           "name": "model",
@@ -244,7 +107,7 @@
         {
           "name": "data_dict",
           "type": "CONDITIONING",
-          "link": 51
+          "link": 130
         }
       ],
       "outputs": [
@@ -261,7 +124,7 @@
       },
       "widgets_values": [
         20,
-        381967489,
+        1474304982,
         "randomize",
         5,
         5,
@@ -284,8 +147,8 @@
         78
       ],
       "flags": {},
-      "order": 40,
-      "mode": 2,
+      "order": 46,
+      "mode": 0,
       "inputs": [
         {
           "name": "images",
@@ -316,85 +179,6 @@
       ]
     },
     {
-      "id": 34,
-      "type": "InteractAvatar_SM_Predata",
-      "pos": [
-        20575.27704051971,
-        -562.9400484305286
-      ],
-      "size": [
-        430.9281606020304,
-        484
-      ],
-      "flags": {},
-      "order": 25,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 52
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 53
-        },
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 58
-        },
-        {
-          "name": "pose_images",
-          "type": "IMAGE",
-          "link": 57
-        },
-        {
-          "name": "audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 56
-        },
-        {
-          "name": "object_images",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": null
-        },
-        {
-          "name": "object_mask",
-          "shape": 7,
-          "type": "MASK",
-          "link": null
-        }
-      ],
-      "outputs": [
-        {
-          "name": "data_dict",
-          "type": "CONDITIONING",
-          "links": [
-            54
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "InteractAvatar_SM_Predata"
-      },
-      "widgets_values": [
-        512,
-        "Hand clenches in a fist to cheer,\nRest chin on one hand in thought.",
-        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
-        "(Hand clenches in a fist) (Cheer with clenched fist),\n(Raise one hand slowly to the chin) (Rest chin on the hand)",
-        1000,
-        "a2mv",
-        2,
-        true,
-        "",
-        ""
-      ]
-    },
-    {
       "id": 35,
       "type": "InteractAvatar_SM_Model",
       "pos": [
@@ -406,8 +190,8 @@
         154
       ],
       "flags": {},
-      "order": 3,
-      "mode": 0,
+      "order": 0,
+      "mode": 2,
       "inputs": [],
       "outputs": [
         {
@@ -430,71 +214,6 @@
       ]
     },
     {
-      "id": 8,
-      "type": "CLIPLoader",
-      "pos": [
-        20233.043156660322,
-        -827.0414995742086
-      ],
-      "size": [
-        270,
-        106
-      ],
-      "flags": {},
-      "order": 4,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            52
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
-        "wan",
-        "default"
-      ]
-    },
-    {
-      "id": 5,
-      "type": "VAELoader",
-      "pos": [
-        20233.964106665513,
-        -666.2111245505673
-      ],
-      "size": [
-        270,
-        58
-      ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            4,
-            53
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "Wan2.2_VAE.pth"
-      ]
-    },
-    {
       "id": 13,
       "type": "InteractAvatar_SM_Sampler",
       "pos": [
@@ -506,8 +225,8 @@
         318
       ],
       "flags": {},
-      "order": 30,
-      "mode": 0,
+      "order": 42,
+      "mode": 2,
       "inputs": [
         {
           "name": "model",
@@ -517,7 +236,7 @@
         {
           "name": "data_dict",
           "type": "CONDITIONING",
-          "link": 54
+          "link": 139
         }
       ],
       "outputs": [
@@ -534,7 +253,7 @@
       },
       "widgets_values": [
         20,
-        1034563315,
+        507338330,
         "randomize",
         5,
         5,
@@ -543,114 +262,6 @@
         25,
         1000,
         false
-      ]
-    },
-    {
-      "id": 9,
-      "type": "LoadImage",
-      "pos": [
-        19817.499679613604,
-        -756.4208862352102
-      ],
-      "size": [
-        270,
-        314
-      ],
-      "flags": {},
-      "order": 6,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            58
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "001.png",
-        "image"
-      ]
-    },
-    {
-      "id": 10,
-      "type": "LoadImage",
-      "pos": [
-        19839.92752091642,
-        -392.48311359683214
-      ],
-      "size": [
-        270,
-        314
-      ],
-      "flags": {},
-      "order": 7,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            57
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "001 (1).png",
-        "image"
-      ]
-    },
-    {
-      "id": 12,
-      "type": "LoadAudio",
-      "pos": [
-        20226.379812505147,
-        -336.1859815149922
-      ],
-      "size": [
-        285.46652238349634,
-        221.47288685617252
-      ],
-      "flags": {},
-      "order": 8,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "AUDIO",
-          "type": "AUDIO",
-          "links": [
-            56,
-            59
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadAudio"
-      },
-      "widgets_values": [
-        "002.WAV",
-        null,
-        null
       ]
     },
     {
@@ -665,8 +276,8 @@
         78
       ],
       "flags": {},
-      "order": 36,
-      "mode": 0,
+      "order": 47,
+      "mode": 2,
       "inputs": [
         {
           "name": "images",
@@ -708,8 +319,8 @@
         154
       ],
       "flags": {},
-      "order": 9,
-      "mode": 2,
+      "order": 1,
+      "mode": 0,
       "inputs": [],
       "outputs": [
         {
@@ -743,8 +354,8 @@
         815
       ],
       "flags": {},
-      "order": 42,
-      "mode": 2,
+      "order": 48,
+      "mode": 0,
       "inputs": [
         {
           "name": "video",
@@ -761,129 +372,18 @@
       ]
     },
     {
-      "id": 29,
-      "type": "LoadImage",
-      "pos": [
-        22514.549266427664,
-        -159.4141741239947
-      ],
-      "size": [
-        270,
-        314.0000000000001
-      ],
-      "flags": {},
-      "order": 10,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            49
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [
-            41
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage",
-        "image": "clipspace/clipspace-painted-masked-1770619718083.png [input]"
-      },
-      "widgets_values": [
-        "clipspace/clipspace-painted-masked-1770619718083.png [input]",
-        "image"
-      ]
-    },
-    {
-      "id": 26,
-      "type": "LoadImage",
-      "pos": [
-        22198.935219632036,
-        -241.44847699606
-      ],
-      "size": [
-        270,
-        314.0000000000001
-      ],
-      "flags": {},
-      "order": 11,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            47
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "003_obj_coffee.png",
-        "image"
-      ]
-    },
-    {
-      "id": 28,
-      "type": "LoadAudio",
-      "pos": [
-        22563.286878037456,
-        -454.15325713544894
-      ],
-      "size": [
-        270,
-        136
-      ],
-      "flags": {},
-      "order": 12,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "AUDIO",
-          "type": "AUDIO",
-          "links": [
-            39,
-            46
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadAudio"
-      },
-      "widgets_values": [
-        "02-seedtts-02_promptvn.wav",
-        null,
-        null
-      ]
-    },
-    {
       "id": 37,
       "type": "VAEDecode",
       "pos": [
-        23746.42226156669,
-        683.8375855155487
+        23726.161361452552,
+        577.7658143297771
       ],
       "size": [
         140,
         46
       ],
       "flags": {},
-      "order": 38,
+      "order": 31,
       "mode": 2,
       "inputs": [
         {
@@ -912,118 +412,18 @@
       "widgets_values": []
     },
     {
-      "id": 38,
-      "type": "CLIPLoader",
-      "pos": [
-        22596.091780321924,
-        513.7922930870564
-      ],
-      "size": [
-        270,
-        106
-      ],
-      "flags": {},
-      "order": 13,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "CLIP",
-          "type": "CLIP",
-          "links": [
-            81
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "CLIPLoader"
-      },
-      "widgets_values": [
-        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
-        "wan",
-        "default"
-      ]
-    },
-    {
-      "id": 39,
-      "type": "VAELoader",
-      "pos": [
-        22606.330577438424,
-        681.6652269738995
-      ],
-      "size": [
-        270,
-        58
-      ],
-      "flags": {},
-      "order": 14,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "VAE",
-          "type": "VAE",
-          "links": [
-            63,
-            82
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "VAELoader"
-      },
-      "widgets_values": [
-        "Wan2.2_VAE.pth"
-      ]
-    },
-    {
-      "id": 40,
-      "type": "InvertMask",
-      "pos": [
-        22930.96984722589,
-        1384.1367731799974
-      ],
-      "size": [
-        140,
-        26
-      ],
-      "flags": {},
-      "order": 28,
-      "mode": 2,
-      "inputs": [
-        {
-          "name": "mask",
-          "type": "MASK",
-          "link": 64
-        }
-      ],
-      "outputs": [
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [
-            87
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "InvertMask"
-      },
-      "widgets_values": []
-    },
-    {
       "id": 42,
       "type": "InteractAvatar_SM_Sampler",
       "pos": [
-        23367.805629316197,
-        812.1519245324877
+        23347.544729202058,
+        706.0801533467161
       ],
       "size": [
         281.2984375,
         318
       ],
       "flags": {},
-      "order": 35,
+      "order": 26,
       "mode": 2,
       "inputs": [
         {
@@ -1034,7 +434,7 @@
         {
           "name": "data_dict",
           "type": "CONDITIONING",
-          "link": 66
+          "link": null
         }
       ],
       "outputs": [
@@ -1051,7 +451,7 @@
       },
       "widgets_values": [
         20,
-        2144302668,
+        942579874,
         "randomize",
         5,
         5,
@@ -1066,15 +466,15 @@
       "id": 43,
       "type": "CreateVideo",
       "pos": [
-        23657.70508897282,
-        833.4165518052188
+        23637.44418885868,
+        727.3447806194472
       ],
       "size": [
         270,
         78
       ],
       "flags": {},
-      "order": 41,
+      "order": 40,
       "mode": 2,
       "inputs": [
         {
@@ -1109,15 +509,15 @@
       "id": 56,
       "type": "InteractAvatar_SM_Model",
       "pos": [
-        23002.779465547923,
-        526.732636258864
+        22982.518565433784,
+        420.6608650730922
       ],
       "size": [
         278.662109375,
         154
       ],
       "flags": {},
-      "order": 15,
+      "order": 2,
       "mode": 2,
       "inputs": [],
       "outputs": [
@@ -1144,8 +544,8 @@
       "id": 57,
       "type": "SaveVideo",
       "pos": [
-        23909.968028426923,
-        642.1620429571349
+        23889.707128312784,
+        536.0902717713633
       ],
       "size": [
         478,
@@ -1170,165 +570,18 @@
       ]
     },
     {
-      "id": 61,
-      "type": "SaveImage",
-      "pos": [
-        23393.684679030324,
-        1203.97314586563
-      ],
-      "size": [
-        270,
-        270
-      ],
-      "flags": {},
-      "order": 27,
-      "mode": 2,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 80
-        }
-      ],
-      "outputs": [],
-      "properties": {},
-      "widgets_values": [
-        "ComfyUI"
-      ]
-    },
-    {
-      "id": 60,
-      "type": "LoadAudio",
-      "pos": [
-        22594.606342137093,
-        921.544533089897
-      ],
-      "size": [
-        309.32998257449435,
-        155.0690824603613
-      ],
-      "flags": {},
-      "order": 16,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "AUDIO",
-          "type": "AUDIO",
-          "links": [
-            68,
-            85
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadAudio"
-      },
-      "widgets_values": [
-        "bzya5p228n0xlz96_clip_0000_118.wav",
-        null,
-        null
-      ]
-    },
-    {
-      "id": 65,
-      "type": "GetVideoComponents",
-      "pos": [
-        22618.49777155802,
-        791.805889808121
-      ],
-      "size": [
-        140,
-        66
-      ],
-      "flags": {},
-      "order": 29,
-      "mode": 2,
-      "inputs": [
-        {
-          "name": "video",
-          "type": "VIDEO",
-          "link": 89
-        }
-      ],
-      "outputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "links": [
-            90
-          ]
-        },
-        {
-          "name": "audio",
-          "type": "AUDIO",
-          "links": null
-        },
-        {
-          "name": "fps",
-          "type": "FLOAT",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "GetVideoComponents"
-      },
-      "widgets_values": []
-    },
-    {
-      "id": 58,
-      "type": "LoadImage",
-      "pos": [
-        22612.610519138565,
-        1175.7618158730838
-      ],
-      "size": [
-        270,
-        314.0000000000001
-      ],
-      "flags": {},
-      "order": 17,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            80,
-            86
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": [
-            64
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage",
-        "image": "clipspace/clipspace-painted-masked-1770639930165.png [input]"
-      },
-      "widgets_values": [
-        "clipspace/clipspace-painted-masked-1770639930165.png [input]",
-        "image"
-      ]
-    },
-    {
       "id": 64,
       "type": "LoadVideo",
       "pos": [
-        22089.330733282997,
-        636.8695948176855
+        22069.069833168858,
+        530.7978236319138
       ],
       "size": [
         501.52448895366615,
-        360.5854222592378
+        360.5854222592379
       ],
       "flags": {},
-      "order": 18,
+      "order": 3,
       "mode": 2,
       "inputs": [],
       "outputs": [
@@ -1349,18 +602,526 @@
       ]
     },
     {
+      "id": 69,
+      "type": "Note",
+      "pos": [
+        22207.155134356322,
+        400.285778982471
+      ],
+      "size": [
+        328.2714347664587,
+        88
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "垫图可以输入单张图片\ncan input 1 image"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 7,
+      "type": "SaveVideo",
+      "pos": [
+        21459.000968860535,
+        -517.537289595406
+      ],
+      "size": [
+        490.9504670058959,
+        620.7824650219009
+      ],
+      "flags": {},
+      "order": 49,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 6
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "video/ComfyUI",
+        "auto",
+        "auto"
+      ]
+    },
+    {
+      "id": 70,
+      "type": "Note",
+      "pos": [
+        21031.528040733716,
+        -210.4890065253783
+      ],
+      "size": [
+        377.1717131007499,
+        88
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "提示词要求，最上面的提示词对应对应最下面的，行数须相同，可以加词或者行数"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 87,
+      "type": "LoadImage",
+      "pos": [
+        20579.43361970252,
+        521.3083416005229
+      ],
+      "size": [
+        270,
+        314.00000000000006
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            114
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            121
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "image": "clipspace/clipspace-painted-masked-1772254402829.png [input]"
+      },
+      "widgets_values": [
+        "clipspace/clipspace-painted-masked-1772254402829.png [input]",
+        "image"
+      ]
+    },
+    {
+      "id": 78,
+      "type": "SaveImage",
+      "pos": [
+        21309.935318567386,
+        354.55122540713666
+      ],
+      "size": [
+        257.6727061509082,
+        276.0409117311365
+      ],
+      "flags": {},
+      "order": 33,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 97
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 76,
+      "type": "InteractAvatar_SM_Pose",
+      "pos": [
+        20968.629654381937,
+        415.4258424742664
+      ],
+      "size": [
+        270,
+        126
+      ],
+      "flags": {},
+      "order": 28,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 114
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": 121
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            97
+          ]
+        },
+        {
+          "name": "obj_images",
+          "type": "IMAGE",
+          "links": [
+            122
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Pose"
+      },
+      "widgets_values": [
+        "dw-ll_ucoco_384.onnx",
+        "yolox_l.onnx",
+        false
+      ]
+    },
+    {
+      "id": 96,
+      "type": "PreviewImage",
+      "pos": [
+        21281.270953459018,
+        725.958442085686
+      ],
+      "size": [
+        307.445455488727,
+        246
+      ],
+      "flags": {},
+      "order": 34,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 122
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 23,
+      "type": "CLIPLoader",
+      "pos": [
+        22571.92322214492,
+        -801.1227967958882
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            123
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "wan",
+        "default"
+      ]
+    },
+    {
+      "id": 24,
+      "type": "VAELoader",
+      "pos": [
+        22582.16201926142,
+        -633.2498629090453
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            26,
+            124
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "Wan2.2_VAE.pth"
+      ]
+    },
+    {
+      "id": 25,
+      "type": "LoadImage",
+      "pos": [
+        22072.16157580026,
+        -684.5196914331542
+      ],
+      "size": [
+        270,
+        314.00000000000006
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            118,
+            127
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": [
+            117
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage",
+        "image": "clipspace/clipspace-painted-masked-1772262232263.png [input]"
+      },
+      "widgets_values": [
+        "clipspace/clipspace-painted-masked-1772262232263.png [input]",
+        "image"
+      ]
+    },
+    {
+      "id": 100,
+      "type": "InteractAvatar_SM_Predata",
+      "pos": [
+        22896.72289764981,
+        653.5050953081927
+      ],
+      "size": [
+        400,
+        464
+      ],
+      "flags": {},
+      "order": 32,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 131
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 132
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 134
+        },
+        {
+          "name": "pose_images",
+          "type": "IMAGE",
+          "link": 135
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 133
+        },
+        {
+          "name": "object_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 136
+        }
+      ],
+      "outputs": [
+        {
+          "name": "data_dict",
+          "type": "CONDITIONING",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Predata"
+      },
+      "widgets_values": [
+        512,
+        "A woman with long dark hair, wearing large gold hoop earrings and a navy blue hoodie, sits holding a thin, flat, black rectangular object with vertical ridges. She is indoors in a room with white walls, a wooden cabinet visible behind her, and several cardboard boxes on the floor around her.",
+        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
+        "",
+        133,
+        "ap2v",
+        1,
+        true,
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 38,
+      "type": "CLIPLoader",
+      "pos": [
+        22575.830880207785,
+        407.7205219012846
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            131
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "wan",
+        "default"
+      ]
+    },
+    {
+      "id": 39,
+      "type": "VAELoader",
+      "pos": [
+        22586.069677324285,
+        575.5934557881279
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            63,
+            132
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "Wan2.2_VAE.pth"
+      ]
+    },
+    {
+      "id": 65,
+      "type": "GetVideoComponents",
+      "pos": [
+        22598.23687144388,
+        685.7341186223495
+      ],
+      "size": [
+        140,
+        66
+      ],
+      "flags": {},
+      "order": 27,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "video",
+          "type": "VIDEO",
+          "link": 89
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            134
+          ]
+        },
+        {
+          "name": "audio",
+          "type": "AUDIO",
+          "links": null
+        },
+        {
+          "name": "fps",
+          "type": "FLOAT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GetVideoComponents"
+      },
+      "widgets_values": []
+    },
+    {
       "id": 68,
       "type": "VHS_LoadVideo",
       "pos": [
-        22198.183836371754,
-        1011.1363854893792
+        22177.922936257615,
+        905.0646143036076
       ],
       "size": [
         261.6533203125,
         462.0876116071429
       ],
       "flags": {},
-      "order": 19,
+      "order": 12,
       "mode": 2,
       "inputs": [
         {
@@ -1381,7 +1142,7 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            93
+            135
           ]
         },
         {
@@ -1430,219 +1191,498 @@
       }
     },
     {
-      "id": 62,
-      "type": "InteractAvatar_SM_Predata",
+      "id": 60,
+      "type": "LoadAudio",
       "pos": [
-        22931.66087384489,
-        755.8245633100523
+        22501.536218083384,
+        914.5019742266928
       ],
       "size": [
-        398.2881522781572,
-        512.4055027016293
+        309.32998257449435,
+        155.0690824603613
       ],
       "flags": {},
-      "order": 32,
+      "order": 13,
       "mode": 2,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 81
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 82
-        },
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 90
-        },
-        {
-          "name": "pose_images",
-          "type": "IMAGE",
-          "link": 93
-        },
-        {
-          "name": "audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 85
-        },
-        {
-          "name": "object_images",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 86
-        },
-        {
-          "name": "object_mask",
-          "shape": 7,
-          "type": "MASK",
-          "link": 87
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
-          "name": "data_dict",
-          "type": "CONDITIONING",
+          "name": "AUDIO",
+          "type": "AUDIO",
           "links": [
-            66
+            68,
+            133
           ]
         }
       ],
       "properties": {
-        "Node name for S&R": "InteractAvatar_SM_Predata"
+        "Node name for S&R": "LoadAudio"
       },
       "widgets_values": [
-        512,
-        "A woman with long dark hair, wearing large gold hoop earrings and a navy blue hoodie, sits holding a thin, flat, black rectangular object with vertical ridges. She is indoors in a room with white walls, a wooden cabinet visible behind her, and several cardboard boxes on the floor around her.",
-        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
-        "",
-        133,
-        "ap2v",
-        1,
-        "",
-        "",
-        ""
+        "bzya5p228n0xlz96_clip_0000_118.wav",
+        null,
+        null
       ]
     },
     {
-      "id": 33,
-      "type": "InteractAvatar_SM_Predata",
+      "id": 58,
+      "type": "LoadImage",
       "pos": [
-        22907.492315667885,
-        -559.0905265728924
+        22590.61606607349,
+        1128.8475391382121
       ],
       "size": [
-        418.76042765551756,
-        532.3827305146999
+        270,
+        314.0000000000001
       ],
       "flags": {},
-      "order": 31,
+      "order": 14,
       "mode": 2,
-      "inputs": [
-        {
-          "name": "clip",
-          "type": "CLIP",
-          "link": 43
-        },
-        {
-          "name": "vae",
-          "type": "VAE",
-          "link": 44
-        },
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 45
-        },
-        {
-          "name": "pose_images",
-          "type": "IMAGE",
-          "link": 47
-        },
-        {
-          "name": "audio",
-          "shape": 7,
-          "type": "AUDIO",
-          "link": 46
-        },
-        {
-          "name": "object_images",
-          "shape": 7,
-          "type": "IMAGE",
-          "link": 49
-        },
-        {
-          "name": "object_mask",
-          "shape": 7,
-          "type": "MASK",
-          "link": 50
-        }
-      ],
+      "inputs": [],
       "outputs": [
         {
-          "name": "data_dict",
-          "type": "CONDITIONING",
+          "name": "IMAGE",
+          "type": "IMAGE",
           "links": [
-            51
+            136
           ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
         }
       ],
       "properties": {
-        "Node name for S&R": "InteractAvatar_SM_Predata"
+        "Node name for S&R": "LoadImage",
+        "image": "clipspace/clipspace-painted-masked-1770639930165.png [input]"
       },
       "widgets_values": [
-        512,
-        "The woman took the coffee from the table and drank it.",
-        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
-        "(Moved her right hand away from the coffee cup)(Picked up the coffee cup with her left hand)(Brought the cup close to her mouth)(Took a sip)",
-        101,
-        "a2mv",
-        1,
-        "",
-        "",
-        ""
+        "clipspace/clipspace-painted-masked-1770639930165.png [input]",
+        "image"
       ]
     },
     {
-      "id": 55,
+      "id": 101,
       "type": "Note",
       "pos": [
-        23388.178987328633,
-        448.9991023258981
+        22943.16054286803,
+        1215.995109728227
       ],
       "size": [
-        390.28170729224803,
-        246.35694222626103
+        250.8390418008603,
+        117.20724738108925
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "物体图片必须是白底物体\n"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 8,
+      "type": "CLIPLoader",
+      "pos": [
+        20233.043156660322,
+        -827.0414995742086
+      ],
+      "size": [
+        270,
+        106
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            137
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "umt5_xxl_fp8_e4m3fn_scaled.safetensors",
+        "wan",
+        "default"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "VAELoader",
+      "pos": [
+        20233.964106665513,
+        -666.2111245505673
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            4,
+            138
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "Wan2.2_VAE.pth"
+      ]
+    },
+    {
+      "id": 9,
+      "type": "LoadImage",
+      "pos": [
+        19817.499679613604,
+        -756.4208862352102
+      ],
+      "size": [
+        270,
+        314
+      ],
+      "flags": {},
+      "order": 18,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            98,
+            142
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "001.png",
+        "image"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "LoadAudio",
+      "pos": [
+        20225.42635838213,
+        -229.5183015023331
+      ],
+      "size": [
+        285.46652238349634,
+        221.47288685617252
+      ],
+      "flags": {},
+      "order": 19,
+      "mode": 2,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            59,
+            144
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values": [
+        "002.WAV",
+        null,
+        null
+      ]
+    },
+    {
+      "id": 80,
+      "type": "InteractAvatar_SM_Pose",
+      "pos": [
+        20188.576594300783,
+        -498.3945454937761
+      ],
+      "size": [
+        270,
+        126
+      ],
+      "flags": {},
+      "order": 30,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 98
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            102,
+            143
+          ]
+        },
+        {
+          "name": "obj_images",
+          "type": "IMAGE",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Pose"
+      },
+      "widgets_values": [
+        "dw-ll_ucoco_384.onnx",
+        "yolox_l.onnx",
+        true
+      ]
+    },
+    {
+      "id": 83,
+      "type": "SaveImage",
+      "pos": [
+        19815.488965259814,
+        -266.3614719720716
+      ],
+      "size": [
+        270,
+        58
+      ],
+      "flags": {},
+      "order": 38,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 102
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "ComfyUI"
+      ]
+    },
+    {
+      "id": 102,
+      "type": "InteractAvatar_SM_Predata",
+      "pos": [
+        20719.62796703902,
+        -1607.294752674524
+      ],
+      "size": [
+        430.9281606020304,
+        484
       ],
       "flags": {},
       "order": 20,
-      "mode": 2,
-      "inputs": [],
-      "outputs": [],
-      "properties": {},
-      "widgets_values": [
-        "\n音频及pose驱动视频\n# for pose dirven with audio\nmode=ap2v\ntransformer_path=interact-avatar\ntest_data_path=InterDemo/TIAP2V/demo_ap2v.json\nback_append_frame=1\nframe_num=133\n提示词格式须遵循json文件内的书写要求\n如果是中文，加单引号括起来，圆括号不能删除，是格式要求"
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": null
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": null
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "pose_images",
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": null
+        },
+        {
+          "name": "object_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "object_mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        }
       ],
-      "color": "#432",
-      "bgcolor": "#653"
+      "outputs": [
+        {
+          "name": "data_dict",
+          "type": "CONDITIONING",
+          "links": []
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Predata"
+      },
+      "widgets_values": [
+        512,
+        "Hand clenches in a fist to cheer,\nRest chin on one hand in thought.",
+        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
+        "(Hand clenches in a fist) (Cheer with clenched fist),\n(Raise one hand slowly to the chin) (Rest chin on the hand)",
+        1000,
+        "a2mv",
+        2,
+        true,
+        "",
+        ""
+      ]
     },
     {
-      "id": 69,
-      "type": "Note",
+      "id": 103,
+      "type": "InteractAvatar_SM_Predata",
       "pos": [
-        22227.41603447046,
-        506.35755016824277
+        20553.58681486191,
+        -555.8263190162755
       ],
       "size": [
-        328.2714347664587,
-        88
+        400,
+        464
       ],
       "flags": {},
-      "order": 21,
+      "order": 39,
       "mode": 2,
-      "inputs": [],
-      "outputs": [],
-      "properties": {},
-      "widgets_values": [
-        "垫图可以输入单张图片\ncan input 1 image"
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 137
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 138
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 142
+        },
+        {
+          "name": "pose_images",
+          "type": "IMAGE",
+          "link": 143
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 144
+        },
+        {
+          "name": "object_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
       ],
-      "color": "#432",
-      "bgcolor": "#653"
+      "outputs": [
+        {
+          "name": "data_dict",
+          "type": "CONDITIONING",
+          "links": [
+            139
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Predata"
+      },
+      "widgets_values": [
+        512,
+        "Hand clenches in a fist to cheer,\nRest chin on one hand in thought.",
+        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
+        "(Hand clenches in a fist) (Cheer with clenched fist),\n(Raise one hand slowly to the chin) (Rest chin on the hand)",
+        1000,
+        "a2mv",
+        2,
+        true,
+        "",
+        ""
+      ]
     },
     {
       "id": 22,
       "type": "Note",
       "pos": [
-        23364.01042915163,
-        -801.5578342533277
+        23356.07888266577,
+        -850.7334224656438
       ],
       "size": [
         369.44056838048346,
         182.10534512148888
+      ],
+      "flags": {},
+      "order": 21,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "音频及文本驱动视频\nmode=a2mv\ntransformer_path=interact-avatar\ntest_data_path=InterDemo/TIA2MV/demo_tia2mv.json\nback_append_frame=1\nframe_num=101\n提示词格式须遵循json文件内的书写要求\n如果是中文，加单引号括起来，圆括号不能删除，是格式要求\n这里最下面的提示词不用分成多行\n大显存short size 设置为704以获取更高的质量\n"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 55,
+      "type": "Note",
+      "pos": [
+        23367.918087214493,
+        342.92733114012634
+      ],
+      "size": [
+        390.28170729224803,
+        246.35694222626103
       ],
       "flags": {},
       "order": 22,
@@ -1651,7 +1691,7 @@
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "音频及文本驱动视频\nmode=a2mv\ntransformer_path=interact-avatar\ntest_data_path=InterDemo/TIA2MV/demo_tia2mv.json\nback_append_frame=1\nframe_num=101\n提示词格式须遵循json文件内的书写要求\n如果是中文，加单引号括起来，圆括号不能删除，是格式要求\n这里最下面的提示词不用分成多行\n"
+        "\n音频及pose驱动视频\n# for pose dirven with audio\nmode=ap2v\ntransformer_path=interact-avatar\ntest_data_path=InterDemo/TIAP2V/demo_ap2v.json\nback_append_frame=1\nframe_num=133\n提示词格式须遵循json文件内的书写要求\n如果是中文，加单引号括起来，圆括号不能删除，是格式要求\n大显存short size 设置为704以获取更高的质量"
       ],
       "color": "#432",
       "bgcolor": "#653"
@@ -1669,64 +1709,250 @@
       ],
       "flags": {},
       "order": 23,
-      "mode": 0,
+      "mode": 2,
       "inputs": [],
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "# 音频及动作文本驱动\nfor song with action\n# mode=a2mv\n# transformer_path=interact-avatar-long\n# test_data_path=demo_song_action.json\n# back_append_frame=2\n# frame_num=1000\n提示词格式须遵循json文件内的书写要求，最上面的提示词是要分行的，最下面的也一样，必须行数相同，内容根据你的要求书写，\n如果是中文，加单引号括起来，圆括号不能删除，是格式要求"
+        "# 音频及动作文本驱动\nfor song with action\n# mode=a2mv\n# transformer_path=interact-avatar-long\n# test_data_path=demo_song_action.json\n# back_append_frame=2\n# frame_num=1000\n提示词格式须遵循json文件内的书写要求，最上面的提示词是要分行的，最下面的也一样，必须行数相同，内容根据你的要求书写，\n如果是中文，加单引号括起来，圆括号不能删除，是格式要求\n大显存short size 设置为704以获取更高的质量"
       ],
       "color": "#432",
       "bgcolor": "#653"
     },
     {
-      "id": 7,
-      "type": "SaveVideo",
+      "id": 28,
+      "type": "LoadAudio",
       "pos": [
-        21459.000968860535,
-        -517.537289595406
+        22456.820545283324,
+        -525.419097157055
       ],
       "size": [
-        490.9504670058959,
-        620.7824650219009
-      ],
-      "flags": {},
-      "order": 39,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "video",
-          "type": "VIDEO",
-          "link": 6
-        }
-      ],
-      "outputs": [],
-      "properties": {},
-      "widgets_values": [
-        "video/ComfyUI",
-        "auto",
-        "auto"
-      ]
-    },
-    {
-      "id": 70,
-      "type": "Note",
-      "pos": [
-        21031.528040733716,
-        -210.4890065253783
-      ],
-      "size": [
-        377.1717131007499,
-        88
+        270,
+        136
       ],
       "flags": {},
       "order": 24,
       "mode": 0,
       "inputs": [],
+      "outputs": [
+        {
+          "name": "AUDIO",
+          "type": "AUDIO",
+          "links": [
+            39,
+            129
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadAudio"
+      },
+      "widgets_values": [
+        "02-seedtts-02_promptvn.wav",
+        null,
+        null
+      ]
+    },
+    {
+      "id": 94,
+      "type": "InteractAvatar_SM_Pose",
+      "pos": [
+        22451.733702522626,
+        -311.7164598035645
+      ],
+      "size": [
+        270,
+        126
+      ],
+      "flags": {},
+      "order": 29,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 118
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": 117
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            119,
+            126
+          ]
+        },
+        {
+          "name": "obj_images",
+          "type": "IMAGE",
+          "links": [
+            128,
+            145
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Pose"
+      },
+      "widgets_values": [
+        "dw-ll_ucoco_384.onnx",
+        "yolox_l.onnx",
+        true
+      ]
+    },
+    {
+      "id": 95,
+      "type": "PreviewImage",
+      "pos": [
+        22392.098742390273,
+        -98.87519990373411
+      ],
+      "size": [
+        287.3520008300802,
+        246
+      ],
+      "flags": {},
+      "order": 35,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 119
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 99,
+      "type": "InteractAvatar_SM_Predata",
+      "pos": [
+        22920.120638598328,
+        -540.2185671742533
+      ],
+      "size": [
+        402.2200749832773,
+        500.26122472686404
+      ],
+      "flags": {},
+      "order": 36,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 123
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 124
+        },
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 127
+        },
+        {
+          "name": "pose_images",
+          "type": "IMAGE",
+          "link": 126
+        },
+        {
+          "name": "audio",
+          "shape": 7,
+          "type": "AUDIO",
+          "link": 129
+        },
+        {
+          "name": "object_images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 128
+        }
+      ],
+      "outputs": [
+        {
+          "name": "data_dict",
+          "type": "CONDITIONING",
+          "links": [
+            130
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "InteractAvatar_SM_Predata"
+      },
+      "widgets_values": [
+        512,
+        "The woman took the coffee from the table and drank it.",
+        "bright tones, overexposed, static, blurred details, subtitles, style, works, paintings, images, static, overall gray, worst quality, low quality, JPEG compression residue, ugly, incomplete, extra fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fused fingers, still picture, messy background, three legs, many people in the background, walking backwards",
+        "(Moved her right hand away from the coffee cup)(Picked up the coffee cup with her left hand)(Brought the cup close to her mouth)(Took a sip)",
+        101,
+        "a2mv",
+        1,
+        true,
+        "",
+        ""
+      ]
+    },
+    {
+      "id": 104,
+      "type": "PreviewImage",
+      "pos": [
+        22746.950290500958,
+        -95.981839791635
+      ],
+      "size": [
+        140,
+        246
+      ],
+      "flags": {},
+      "order": 37,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 145
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 105,
+      "type": "Note",
+      "pos": [
+        22080.408951062902,
+        -298.0436145770074
+      ],
+      "size": [
+        275.0634417826441,
+        88
+      ],
+      "flags": {},
+      "order": 25,
+      "mode": 0,
+      "inputs": [],
       "outputs": [],
       "properties": {},
       "widgets_values": [
-        "提示词要求，最上面的提示词对应对应最下面的，行数须相同，可以加词或者行数"
+        "need mask the object\n需要绘制出你要应用的物体的遮罩，越准越好"
       ],
       "color": "#432",
       "bgcolor": "#653"
@@ -1814,132 +2040,12 @@
       "AUDIO"
     ],
     [
-      41,
-      29,
-      1,
-      32,
-      0,
-      "MASK"
-    ],
-    [
-      43,
-      23,
-      0,
-      33,
-      0,
-      "CLIP"
-    ],
-    [
-      44,
-      24,
-      0,
-      33,
-      1,
-      "VAE"
-    ],
-    [
-      45,
-      25,
-      0,
-      33,
-      2,
-      "IMAGE"
-    ],
-    [
-      46,
-      28,
-      0,
-      33,
-      4,
-      "AUDIO"
-    ],
-    [
-      47,
-      26,
-      0,
-      33,
-      3,
-      "IMAGE"
-    ],
-    [
-      49,
-      29,
-      0,
-      33,
-      5,
-      "IMAGE"
-    ],
-    [
-      50,
-      32,
-      0,
-      33,
-      6,
-      "MASK"
-    ],
-    [
-      51,
-      33,
-      0,
-      21,
-      1,
-      "CONDITIONING"
-    ],
-    [
-      52,
-      8,
-      0,
-      34,
-      0,
-      "CLIP"
-    ],
-    [
-      53,
-      5,
-      0,
-      34,
-      1,
-      "VAE"
-    ],
-    [
-      54,
-      34,
-      0,
-      13,
-      1,
-      "CONDITIONING"
-    ],
-    [
       55,
       35,
       0,
       13,
       0,
       "MODEL"
-    ],
-    [
-      56,
-      12,
-      0,
-      34,
-      4,
-      "AUDIO"
-    ],
-    [
-      57,
-      10,
-      0,
-      34,
-      3,
-      "IMAGE"
-    ],
-    [
-      58,
-      9,
-      0,
-      34,
-      2,
-      "IMAGE"
     ],
     [
       59,
@@ -1966,28 +2072,12 @@
       "VAE"
     ],
     [
-      64,
-      58,
-      1,
-      40,
-      0,
-      "MASK"
-    ],
-    [
       65,
       56,
       0,
       42,
       0,
       "MODEL"
-    ],
-    [
-      66,
-      62,
-      0,
-      42,
-      1,
-      "CONDITIONING"
     ],
     [
       67,
@@ -2014,54 +2104,6 @@
       "VIDEO"
     ],
     [
-      80,
-      58,
-      0,
-      61,
-      0,
-      "IMAGE"
-    ],
-    [
-      81,
-      38,
-      0,
-      62,
-      0,
-      "CLIP"
-    ],
-    [
-      82,
-      39,
-      0,
-      62,
-      1,
-      "VAE"
-    ],
-    [
-      85,
-      60,
-      0,
-      62,
-      4,
-      "AUDIO"
-    ],
-    [
-      86,
-      58,
-      0,
-      62,
-      5,
-      "IMAGE"
-    ],
-    [
-      87,
-      40,
-      0,
-      62,
-      6,
-      "MASK"
-    ],
-    [
       89,
       64,
       0,
@@ -2070,19 +2112,235 @@
       "VIDEO"
     ],
     [
-      90,
-      65,
+      97,
+      76,
       0,
-      62,
+      78,
+      0,
+      "IMAGE"
+    ],
+    [
+      98,
+      9,
+      0,
+      80,
+      0,
+      "IMAGE"
+    ],
+    [
+      102,
+      80,
+      0,
+      83,
+      0,
+      "IMAGE"
+    ],
+    [
+      114,
+      87,
+      0,
+      76,
+      0,
+      "IMAGE"
+    ],
+    [
+      117,
+      25,
+      1,
+      94,
+      1,
+      "MASK"
+    ],
+    [
+      118,
+      25,
+      0,
+      94,
+      0,
+      "IMAGE"
+    ],
+    [
+      119,
+      94,
+      0,
+      95,
+      0,
+      "IMAGE"
+    ],
+    [
+      121,
+      87,
+      1,
+      76,
+      1,
+      "MASK"
+    ],
+    [
+      122,
+      76,
+      1,
+      96,
+      0,
+      "IMAGE"
+    ],
+    [
+      123,
+      23,
+      0,
+      99,
+      0,
+      "CLIP"
+    ],
+    [
+      124,
+      24,
+      0,
+      99,
+      1,
+      "VAE"
+    ],
+    [
+      126,
+      94,
+      0,
+      99,
+      3,
+      "IMAGE"
+    ],
+    [
+      127,
+      25,
+      0,
+      99,
       2,
       "IMAGE"
     ],
     [
-      93,
+      128,
+      94,
+      1,
+      99,
+      5,
+      "IMAGE"
+    ],
+    [
+      129,
+      28,
+      0,
+      99,
+      4,
+      "AUDIO"
+    ],
+    [
+      130,
+      99,
+      0,
+      21,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      131,
+      38,
+      0,
+      100,
+      0,
+      "CLIP"
+    ],
+    [
+      132,
+      39,
+      0,
+      100,
+      1,
+      "VAE"
+    ],
+    [
+      133,
+      60,
+      0,
+      100,
+      4,
+      "AUDIO"
+    ],
+    [
+      134,
+      65,
+      0,
+      100,
+      2,
+      "IMAGE"
+    ],
+    [
+      135,
       68,
       0,
-      62,
+      100,
       3,
+      "IMAGE"
+    ],
+    [
+      136,
+      58,
+      0,
+      100,
+      5,
+      "IMAGE"
+    ],
+    [
+      137,
+      8,
+      0,
+      103,
+      0,
+      "CLIP"
+    ],
+    [
+      138,
+      5,
+      0,
+      103,
+      1,
+      "VAE"
+    ],
+    [
+      139,
+      103,
+      0,
+      13,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      142,
+      9,
+      0,
+      103,
+      2,
+      "IMAGE"
+    ],
+    [
+      143,
+      80,
+      0,
+      103,
+      3,
+      "IMAGE"
+    ],
+    [
+      144,
+      12,
+      0,
+      103,
+      4,
+      "AUDIO"
+    ],
+    [
+      145,
+      94,
+      1,
+      104,
+      0,
       "IMAGE"
     ]
   ],
@@ -2117,10 +2375,23 @@
       "id": 4,
       "title": "Group",
       "bounding": [
-        22102.377331939046,
-        359.951986141428,
-        2291.6857937761633,
-        1151.0443112641383
+        22082.116431824907,
+        253.88021495565624,
+        2349.2688212634894,
+        1224.3318007934597
+      ],
+      "color": "#3f789e",
+      "font_size": 24,
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "Group",
+      "bounding": [
+        20516.139478841527,
+        205.9212304593985,
+        1113.010658898933,
+        839.8290433509487
       ],
       "color": "#3f789e",
       "font_size": 24,
@@ -2131,10 +2402,10 @@
   "extra": {
     "workflowRendererVersion": "LG",
     "ds": {
-      "scale": 0.5730855330117559,
+      "scale": 0.39142513012205354,
       "offset": [
-        -19679.843308053405,
-        1135.4929857182988
+        -19846.876957930785,
+        1054.2537934987226
       ]
     },
     "frontendVersion": "1.37.11",

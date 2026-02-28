@@ -198,6 +198,7 @@ def resize_images(img1: Image.Image, img2: Image.Image):
 
     else:
         raise ValueError("输入的图片尺寸不符合预设的两种情况。")
+    
 def resize_short_side(img, short_side=512):
     w, h = img.size
     if h < w:
@@ -210,6 +211,7 @@ def resize_short_side(img, short_side=512):
     new_w = int(new_w // 32 * 32)
     img = img.resize((new_w, new_h), Image.LANCZOS)
     return img
+
 def get_first_frame_from_video(video_path):
     """
     读取视频文件的第一帧并返回一个 PIL Image 对象。

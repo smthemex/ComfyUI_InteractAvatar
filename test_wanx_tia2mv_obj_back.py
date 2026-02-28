@@ -233,7 +233,7 @@ def generate_video(wan_a2v,gen_kwargs):
     return video
 
 
-def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode,prompt,negative_prompt,structured_prompt,frame_num,short_side,back_append_frame,
+def perdata( clip,vae,images,dw_iamges,obj_img,audio_path,mode,prompt,negative_prompt,structured_prompt,frame_num,short_side,back_append_frame,
             wav2vec_dir,device,all_text=False,clips=None,max_frames_num=1000,
             ):
  
@@ -303,7 +303,7 @@ def perdata( clip,vae,images,dw_iamges,object_images,object_mask,audio_path,mode
     audio_embedding = get_embedding(audio_frames_clip, wav2vec_feature_extractor, audio_encoder, device=device)
 
     # obj_img_path = obj_img
-    obj_img = covert_obj_img(object_images,object_mask,target_size=img.size) #RGBA
+    obj_img = covert_obj_img(obj_img,None,target_size=img.size) #RGBA
 
     caption_prompt_list = []
     clear_state = " clear hands and face, objects are clear and stable. human movements are slow and steady, with a strong sense of reality."

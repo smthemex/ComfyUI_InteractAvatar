@@ -9,7 +9,7 @@ from typing_extensions import override
 from comfy_api.latest import ComfyExtension, io
 
 from .test_wanx_tia2mv_obj_back import generate_video,perdata,load_model,get_z_scale
-from .model_loader_utils import trans2path,tensor2pillist,clear_comfyui_cache,get_wav2vec_repo
+from .model_loader_utils import trans2path,tensor2pillist,clear_comfyui_cache,get_wav2vec_repo,tensor_upscale,merge_mask_with_pose,tensor2image
 import nodes
 MAX_SEED = np.iinfo(np.int32).max
 
@@ -24,6 +24,10 @@ if not os.path.exists(weigths_gguf_current_path):
     os.makedirs(weigths_gguf_current_path)
 folder_paths.add_model_folder_path("gguf", weigths_gguf_current_path) #  gguf dir
 
+weigths_dwpose_current_path = os.path.join(folder_paths.models_dir, "dwpose")
+if not os.path.exists(weigths_dwpose_current_path):
+    os.makedirs(weigths_dwpose_current_path)
+folder_paths.add_model_folder_path("dwpose", weigths_dwpose_current_path) #  dwpose dir
 
 class InteractAvatar_SM_Model(io.ComfyNode):
     @classmethod
@@ -83,14 +87,13 @@ class InteractAvatar_SM_Predata(io.ComfyNode):
                 io.String.Input("object_name",multiline=False, default=""),
                 io.Audio.Input("audio",optional=True),
                 io.Image.Input("object_images",optional=True), 
-                io.Mask.Input("object_mask",optional=True), 
                 ],
             outputs=[
                 io.Conditioning.Output(display_name="data_dict"),
             ],
         ) 
     @classmethod
-    def execute(cls, clip,vae,images,pose_images,short_side,prompt,negative_prompt,structured_prompt,num_frames,mode,back_append_frame,all_text,wav2vec_repo,object_name,audio=None,object_images=None,object_mask=None) -> io.NodeOutput: 
+    def execute(cls, clip,vae,images,pose_images,short_side,prompt,negative_prompt,structured_prompt,num_frames,mode,back_append_frame,all_text,wav2vec_repo,object_name,audio=None,object_images=None,) -> io.NodeOutput: 
         
         if back_append_frame==2:
             prompt=[ii for ii in prompt.splitlines() if ii]
@@ -100,13 +103,13 @@ class InteractAvatar_SM_Predata(io.ComfyNode):
         img=tensor2pillist(images)
         dw_img=tensor2pillist(pose_images)
         audio_path=trans2path(audio)
+        object_images=tensor2image(object_images)
         data_dict = perdata(
             clip,
             vae,
             img,
             dw_img,
             object_images,
-            object_mask,
             audio_path,
             mode,
             prompt=prompt,
@@ -176,6 +179,47 @@ class InteractAvatar_SM_Sampler(io.ComfyNode):
         output={"samples":video} 
         return io.NodeOutput(output)
 
+class InteractAvatar_SM_Pose(io.ComfyNode):
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="InteractAvatar_SM_Pose",
+            display_name="InteractAvatar_SM_Pose",
+            category="InteractAvatar",
+            inputs=[
+                io.Image.Input("images"), # image or video
+                io.Combo.Input("dw",options= ["none"] +folder_paths.get_filename_list("dwpose") ), 
+                io.Combo.Input("yolo",options= ["none"] +folder_paths.get_filename_list("dwpose") ),
+                io.Boolean.Input("short_side",default=True),
+                io.Mask.Input("mask",optional=True),
+                ],
+            outputs=[
+                io.Image.Output(display_name="images"),
+                io.Image.Output(display_name="obj_images"),
+            ],
+        ) 
+    @classmethod
+    def execute(cls, images,dw,yolo,short_side,mask=None) -> io.NodeOutput: 
+        dw_path=folder_paths.get_full_path("dwpose", dw) if dw != "none" else None
+        yolo_path=folder_paths.get_full_path("dwpose", yolo) if yolo != "none" else None
+        from .model_loader_utils import get_pose_normal
+        origin_images=images
+        images=get_pose_normal(images,os.path.join(folder_paths.base_path,"dwpose"),device,dw_path,yolo_path)
+        obj_images=torch.ones((1, 256, 256,3))
+        if mask is not None:
+            images,obj_images = merge_mask_with_pose(mask, images,origin_images)
+         
+        if short_side: # 短边为512
+            scale_factor=256/min(images.shape[1],images.shape[2])
+            if images.shape[1]>images.shape[2]: #H>W   
+                h_new=int((images.shape[1]*scale_factor)//32*32)
+                images=tensor_upscale(images,256,h_new)
+            else:
+                w_new=int((images.shape[2]*scale_factor)//32*32)
+                images=tensor_upscale(images,w_new,256)
+        return io.NodeOutput(images,obj_images)
+
+
 class InteractAvatar_SM_Extension(ComfyExtension):
     @override
     async def get_node_list(self) -> list[type[io.ComfyNode]]:
@@ -183,6 +227,7 @@ class InteractAvatar_SM_Extension(ComfyExtension):
             InteractAvatar_SM_Model,
             InteractAvatar_SM_Predata,
             InteractAvatar_SM_Sampler,
+            InteractAvatar_SM_Pose,
         ]
 
 async def comfy_entrypoint() -> InteractAvatar_SM_Extension:  # ComfyUI calls this to load your extension and its nodes.
