@@ -21,9 +21,11 @@
 InteractAvatar is a novel dual-stream DiT framework that enables talking avatars to perform Grounded Human-Object Interaction (GHOI)
 
 # Update
+* Add Dwpose node to easy use
+* 新增dwpose节点，模型为none时会自动下载，简化object物体输入流程，可以之间用mask获取
+
+# Previous
 * fix bug ,now  output video short side muse be 512 or 704
-
-
 * If your Vram <24G,turn on 'offload', ActionAndSong mode use 'long model' and need chocie '2' mode;example img\video\ audio in "InterDemo" dir
 * test env 64G RAM, 12G VRAM,win11
 * The prompt words for the singing mode and the action prompt words must have the same number of lines；
