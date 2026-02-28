@@ -9,7 +9,6 @@ import math
 import comfy.utils
 import cv2
 import random
-import torchaudio
 import folder_paths
 from comfy.utils import common_upscale,ProgressBar
 from safetensors.torch import load_file
@@ -18,9 +17,209 @@ import comfy.model_management as mm
 from pathlib import PureWindowsPath
 cur_path = os.path.dirname(os.path.abspath(__file__))
 
+def merge_mask_with_pose(mask, pose_image,image):
+    """
+    将mask与pose图片合并，使pose遮挡mask的白色区域
+    
+    参数:
+        mask: BHW格式的张量
+        pose_image: BHWC格式的张量，背景为黑色，pose为彩色
+        
+    返回:
+        合并后的BHWC格式张量
+    """
+    object_img=crop_and_center_object(mask, image)
+    # 确保输入是numpy数组
+    if isinstance(mask, torch.Tensor):
+        mask = mask.cpu().numpy()
+    if isinstance(pose_image, torch.Tensor):
+        pose_image = pose_image.cpu().numpy()
+    
+    # 将mask从BHW扩展为BHWC
+    if mask.ndim == 3:  # BHW
+        mask = np.expand_dims(mask, axis=-1)  # 扩展为BHWC
+    
+    # 处理不规则遮罩，转换为方形遮罩
+    batch_size = mask.shape[0]
+    for i in range(batch_size):
+        # 获取当前批次的遮罩
+        current_mask = mask[i, :, :, 0]  # HWC -> HW
+        
+        # 找到遮罩白色区域的边界
+        white_pixels = np.argwhere(current_mask > 0)
+        if len(white_pixels) > 0:
+            # 计算遮罩的边界
+            y_min, x_min = white_pixels.min(axis=0)
+            y_max, x_max = white_pixels.max(axis=0)
+            
+            # 计算遮罩的中心点
+            center_y = (y_min + y_max) // 2
+            center_x = (x_min + x_max) // 2
+            
+            # 计算遮罩最长边
+            height = y_max - y_min
+            width = x_max - x_min
+            max_side = max(height, width)
+            
+            # 计算方形遮罩的边界
+            half_side = max_side // 2
+            new_y_min = max(0, center_y - half_side)
+            new_y_max = min(current_mask.shape[0], center_y + half_side)
+            new_x_min = max(0, center_x - half_side)
+            new_x_max = min(current_mask.shape[1], center_x + half_side)
+            
+            # 创建新的方形遮罩
+            new_mask = np.zeros_like(current_mask)
+            new_mask[new_y_min:new_y_max, new_x_min:new_x_max] = 255
+            
+            # 替换原始遮罩
+            mask[i, :, :, 0] = new_mask
+    
+    # 创建pose的非黑色区域掩码
+    pose_non_black = np.any(pose_image > 0, axis=-1, keepdims=True)
+    
+    # 合并图像：pose非黑色区域使用pose，否则使用mask
+    result = np.where(pose_non_black, pose_image, mask)
+    result=torch.from_numpy(result)
+    
+    return result,object_img
+def crop_and_center_object(mask, image):
+    """
+    使用不规则mask截取图像中的物体，然后居中粘贴到白色背景上
+    
+    参数:
+        mask: BHW格式的张量，表示不规则遮罩（已归一化，范围[0,1]）
+        image: BHWC格式的张量，表示原始图像（已归一化，范围[0,1]）
+        
+    返回:
+        处理后的BHWC格式张量，物体居中在白色背景上
+    """
+    # 确保输入是numpy数组
+    if isinstance(mask, torch.Tensor):
+        mask = mask.cpu().numpy()
+    if isinstance(image, torch.Tensor):
+        image = image.cpu().numpy()
+    
+    # 将mask从BHW扩展为BHWC
+    if mask.ndim == 3:  # BHW
+        mask = np.expand_dims(mask, axis=-1)  # 扩展为BHWC
+    
+    # 处理每个批次的图像
+    batch_size = mask.shape[0]
+    results = []
+    
+    for i in range(batch_size):
+        # 获取当前批次的遮罩和图像
+        current_mask = mask[i, :, :, 0]  # HWC -> HW
+        current_image = image[i]  # HWC
+        threshold = 0.5
+        # 找到遮罩白色区域的边界（遮罩值大于0的区域）
+        white_pixels = np.argwhere(current_mask > threshold)
+        if len(white_pixels) > 0:
+            # 计算遮罩的边界
+            y_min, x_min = white_pixels.min(axis=0)
+            y_max, x_max = white_pixels.max(axis=0)
+            
+            # 计算遮罩最长边
+            height = y_max - y_min
+            width = x_max - x_min
+            max_side = max(height, width)
+            
+            # 截取遮罩和图像区域
+            cropped_mask = current_mask[y_min:y_max, x_min:x_max]
+            cropped_image = current_image[y_min:y_max, x_min:x_max]
+            
+            # 创建白色背景（归一化值为1）
+            white_background = np.ones((max_side, max_side, 3), dtype=np.float32)
+            
+            # 计算物体在白色背景上的位置
+            object_height = y_max - y_min
+            object_width = x_max - x_min
+            y_offset = (max_side - object_height) // 2
+            x_offset = (max_side - object_width) // 2
+            
+            # 使用遮罩作为alpha通道，将物体粘贴到白色背景上
+            # 只在遮罩区域更新背景
+            mask_region = cropped_mask > threshold
+            if np.any(mask_region):
+                white_background[y_offset:y_offset+object_height, 
+                               x_offset:x_offset+object_width][mask_region] = cropped_image[mask_region]
+            
+            results.append(white_background)
+        else:
+            # 如果没有白色区域，直接返回原始图像
+            results.append(current_image)
+    
+    # 将结果转换为张量
+    result = np.stack(results, axis=0)
+    result = torch.from_numpy(result)
+    
+    return result
+
+
+
+
+def get_pose_normal(frames,dw_path,device,dw_ll=None,yolox_l=None):
+    '''
+    frames: BHWC tensor
+    cn_path: CMFY CN model path
+    device: CUDA device, such as "cuda:0"
+    dw_ll: weight path of dw-ll_ucoco_384.onnx, if None, it will be downloaded from huggingface
+    param yolox_l: weight path of yolox_l.onnx, if None, it will be downloaded from huggingface
+     return: list of dict, each dict contains keys: bodies, hands, faces, hands
+    ''' 
+    from huggingface_hub import hf_hub_download
+    from .dwpose.dwpose_detector import DWposeDetector
+    from .dwpose.util import draw_pose
+    frames=tensor2cvlist(frames)
+    if dw_ll is None :
+        dw_ll=hf_hub_download(
+                repo_id="yzd-v/DWPose",
+                subfolder="",
+                filename="dw-ll_ucoco_384.onnx",
+                local_dir = dw_path,
+            ) 
+    if yolox_l is None:
+        yolox_l=hf_hub_download(
+                repo_id="yzd-v/DWPose",
+                subfolder="",
+                filename="yolox_l.onnx",
+                local_dir = dw_path,
+            )     
+
+    visualizer = DWposeDetector(model_det=yolox_l,model_pose=dw_ll,device=device)
+    height, width= frames[0].shape[0:2]
+    detected_poses = [visualizer(frm) for frm in frames]
+    visualizer.release_memory()
+    pose_img = [draw_pose(pose, height, width) for pose in detected_poses]
+    pose_img = [torch.from_numpy(img.astype(np.float32) / 255.0).unsqueeze(0) for img in pose_img]
+    pose_img=torch.cat(pose_img).permute(0, 2, 3, 1)
+    return pose_img
+
+
 
 def covert_obj_img(images, masks,target_size):
     background_color=(255, 255, 255)
+    if masks is None:
+        original_width, original_height = images.size
+        print(f"original_width: {original_width}, original_height: {original_height}") #original_width: 461, original_height: 461
+        target_width, target_height = target_size
+        print(f"target_width: {target_width}, target_height: {target_height}") #target_width: 704, target_height: 1056
+        ratio = min(target_width / original_width, target_height / original_height)
+        
+        # 2. 计算缩放后的新尺寸
+        new_width = int(original_width * ratio)
+        new_height = int(original_height * ratio)
+        
+        # 3. 高质量缩放图片
+        resized_img = images.resize((new_width, new_height), Image.Resampling.LANCZOS)
+        background = Image.new('RGB', target_size, background_color)
+        paste_x = (target_width - new_width) // 2
+        paste_y = (target_height - new_height) // 2
+        background.paste(resized_img, (paste_x, paste_y))
+        background.save("resized_image.png")
+        return background
+    
     if images is not None  and  masks is not None:
         output_list = []
 
@@ -175,8 +374,6 @@ def trans2path(audio):
     with open(audio_file, 'wb') as f:
         f.write(buff.getbuffer())
     return audio_file
-
-
 
 
 
@@ -384,6 +581,15 @@ def tensor2cv(tensor_image):
     img_cv2=np.uint8(tensor_image)#32 to uint8
     img_cv2=cv2.cvtColor(img_cv2,cv2.COLOR_RGB2BGR)
     return img_cv2
+
+def tensor2cvlist(tensor_image):
+
+    tensor_list = list(torch.chunk(tensor_image, chunks=tensor_image.size(0)))
+    tensor_list=[tensor2cv(i) for i in tensor_list]
+    return tensor_list
+
+
+
 
 def phi2narry(img):
     img = torch.from_numpy(np.array(img).astype(np.float32) / 255.0).unsqueeze(0)

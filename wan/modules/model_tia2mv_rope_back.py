@@ -64,22 +64,22 @@ class BlockGPUManager:
             self.managed_motion_proj_modules.append(block) 
 
 
-        if hasattr(transformer_model, 'time_embedding'):
+        if hasattr(transformer_model, 'time_embedding'):#
             self.embedder_modules.append(transformer_model.time_embedding)
         
-        if hasattr(transformer_model, 'time_projection'):
+        if hasattr(transformer_model, 'time_projection'):#
             self.embedder_modules.append(transformer_model.time_projection)
         
-        if hasattr(transformer_model, 'text_embedding'):
+        if hasattr(transformer_model, 'text_embedding'):#
             self.embedder_modules.append(transformer_model.text_embedding)
         
         if hasattr(transformer_model, 'motion_time_embedding'):
             self.embedder_modules.append(transformer_model.motion_time_embedding)
         
-        if hasattr(transformer_model, 'patch_embedding'):
+        if hasattr(transformer_model, 'patch_embedding'): #
             self.embedder_modules.append(transformer_model.patch_embedding)
         
-        if hasattr(transformer_model, 'head'):
+        if hasattr(transformer_model, 'head'):#
             self.embedder_modules.append(transformer_model.head)
 
         if hasattr(transformer_model, 'motion_patch_embedding'):
