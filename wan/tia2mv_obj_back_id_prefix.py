@@ -8,18 +8,22 @@ from contextlib import contextmanager,nullcontext
 from functools import partial
 from safetensors.torch import safe_open
 import torch
-import torch.distributed as dist
+# import torch.distributed as dist
 from tqdm import tqdm
 from .modules.model_tia2mv_rope_back import WanModel,BlockGPUManager
-from .distributed.fsdp import shard_model
+
+#from .distributed.fsdp import shard_model
+
 from accelerate import init_empty_weights
 from diffusers.utils import is_accelerate_available
 from .modules.t5 import T5EncoderModel
 from .modules.vae2_2 import Wan2_2_VAE
 import torchvision.transforms.functional as TF
+
 def torch_gc():
     torch.cuda.empty_cache()
-    torch.cuda.ipc_collect()
+    gc.collect()
+    #torch.cuda.ipc_collect()
 
 def timestep_transform(
     t,
@@ -141,15 +145,15 @@ class WanTIA2MVRefBackIDPrefix:
         self.offload = offload
         self.num_train_timesteps = config.num_train_timesteps
         self.param_dtype = config.param_dtype
-        if self.origin_mode:
-            shard_fn = partial(shard_model, device_id=device_id)
-            self.text_encoder = T5EncoderModel(
-                text_len=config.text_len,
-                dtype=config.t5_dtype,
-                device=torch.device('cpu'),
-                checkpoint_path=os.path.join(checkpoint_dir, config.t5_checkpoint),
-                tokenizer_path=os.path.join(checkpoint_dir, config.t5_tokenizer),
-                shard_fn=shard_fn if t5_fsdp else None)
+        #if self.origin_mode:
+            # shard_fn = partial(shard_model, device_id=device_id)
+            # self.text_encoder = T5EncoderModel(
+            #     text_len=config.text_len,
+            #     dtype=config.t5_dtype,
+            #     device=torch.device('cpu'),
+            #     checkpoint_path=os.path.join(checkpoint_dir, config.t5_checkpoint),
+            #     tokenizer_path=os.path.join(checkpoint_dir, config.t5_tokenizer),
+            #     shard_fn=shard_fn if t5_fsdp else None)
 
         self.vae_stride = config.vae_stride
         self.patch_size = config.patch_size
@@ -612,11 +616,10 @@ class WanTIA2MVRefBackIDPrefix:
         torch_gc()
         if offload_model:    
             torch.cuda.synchronize()
-        if dist.is_initialized():
-            dist.barrier()
-        
-        if dist.is_initialized():
-            dist.barrier()
+
+        # if use_dist_sm_tag:
+        #     if dist.is_initialized():
+        #         dist.barrier()
 
         del noise, latent
         torch_gc()
@@ -1173,15 +1176,16 @@ class WanTIA2MVRefBackIDPrefix:
         #print(f"Generation Finished. Output Shape: {full_motion.shape}") 
         if offload_model:    
             torch.cuda.synchronize()
-        if dist.is_initialized():
-            dist.barrier()
-        
+        # if use_dist_sm_tag:
+        #     if dist.is_initialized():
+        #         dist.barrier()
+            
         return full_video, full_motion if self.rank == 0 else None
 
 
 
-
-mean = torch.tensor(
+def get_scale():
+    mean_interactavatar = torch.tensor(
             [
                 -0.2289,
                 -0.0052,
@@ -1234,66 +1238,69 @@ mean = torch.tensor(
             ],
             device=torch.device('cuda'),
         )
-std = torch.tensor(
-            [
-                0.4765,
-                1.0364,
-                0.4514,
-                1.1677,
-                0.5313,
-                0.4990,
-                0.4818,
-                0.5013,
-                0.8158,
-                1.0344,
-                0.5894,
-                1.0901,
-                0.6885,
-                0.6165,
-                0.8454,
-                0.4978,
-                0.5759,
-                0.3523,
-                0.7135,
-                0.6804,
-                0.5833,
-                1.4146,
-                0.8986,
-                0.5659,
-                0.7069,
-                0.5338,
-                0.4889,
-                0.4917,
-                0.4069,
-                0.4999,
-                0.6866,
-                0.4093,
-                0.5709,
-                0.6065,
-                0.6415,
-                0.4944,
-                0.5726,
-                1.2042,
-                0.5458,
-                1.6887,
-                0.3971,
-                1.0600,
-                0.3943,
-                0.5537,
-                0.5444,
-                0.4089,
-                0.7468,
-                0.7744,
-            ],
-            device=torch.device('cuda'),
-        )
-wanvae_scale = [mean, 1.0 / std]
+    std_interactavatar = torch.tensor(
+                [
+                    0.4765,
+                    1.0364,
+                    0.4514,
+                    1.1677,
+                    0.5313,
+                    0.4990,
+                    0.4818,
+                    0.5013,
+                    0.8158,
+                    1.0344,
+                    0.5894,
+                    1.0901,
+                    0.6885,
+                    0.6165,
+                    0.8454,
+                    0.4978,
+                    0.5759,
+                    0.3523,
+                    0.7135,
+                    0.6804,
+                    0.5833,
+                    1.4146,
+                    0.8986,
+                    0.5659,
+                    0.7069,
+                    0.5338,
+                    0.4889,
+                    0.4917,
+                    0.4069,
+                    0.4999,
+                    0.6866,
+                    0.4093,
+                    0.5709,
+                    0.6065,
+                    0.6415,
+                    0.4944,
+                    0.5726,
+                    1.2042,
+                    0.5458,
+                    1.6887,
+                    0.3971,
+                    1.0600,
+                    0.3943,
+                    0.5537,
+                    0.5444,
+                    0.4089,
+                    0.7468,
+                    0.7744,
+                ],
+                device=torch.device('cuda'),
+            )
+    wanvae_scale = [mean_interactavatar, 1.0 / std_interactavatar]
+    return wanvae_scale
 
 def get_mu_scale(mu):
+    wanvae_scale=get_scale()
     mu = (mu - wanvae_scale[0].view(1, 48, 1, 1, 1).to(mu.device,mu.dtype)) * wanvae_scale[1].view(
                         1, 48, 1, 1, 1).to(mu.device,mu.dtype)
     return mu
 def get_z_scale(z):
+    wanvae_scale=get_scale()
     z = z / wanvae_scale[1].view(1, 48, 1, 1, 1).to(z.device,z.dtype) + wanvae_scale[0].view(
                     1, 48, 1, 1, 1).to(z.device,z.dtype)
     return z
