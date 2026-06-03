@@ -21,7 +21,7 @@ from .wan.configs import WAN_CONFIGS
 from .utils.img_utils import process_images_final,resize_images,resize_short_side
 from .model_loader_utils import covert_obj_img,clear_comfyui_cache
 
-def get_mu_scale():
+def get_mu_scale_():
     mean_InteractAvatar = torch.tensor(
                 [
                     -0.2289,
@@ -132,12 +132,12 @@ def get_mu_scale():
     return wanvae_scale
 
 def get_mu_scale(mu):
-    wanvae_scale = get_mu_scale()
+    wanvae_scale = get_mu_scale_()
     mu = (mu - wanvae_scale[0].view(1, 48, 1, 1, 1).to(mu.device,mu.dtype)) * wanvae_scale[1].view(
                         1, 48, 1, 1, 1).to(mu.device,mu.dtype)
     return mu
 def get_z_scale(z):
-    wanvae_scale=get_mu_scale()
+    wanvae_scale=get_mu_scale_()
     z = z / wanvae_scale[1].view(1, 48, 1, 1, 1).to(z.device,z.dtype) + wanvae_scale[0].view(
                     1, 48, 1, 1, 1).to(z.device,z.dtype)
     return z
